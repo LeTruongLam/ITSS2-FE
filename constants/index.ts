@@ -3,60 +3,50 @@ export const NavLinks = [
   { href: "/", key: "Your library", text: "Your library" },
 ];
 
-export const categoryFilters = [
-  "Frontend",
-  "Backend",
-];
-
 export const footerLinks = [
   {
-    title: "For developers",
+    title: "Xuân Đạt",
     links: [
-      "Go Pro!",
-      "Explore development work",
-     
+      {link: "https://www.github.com/xd3011",
+      icon: "LogoGitHub"},
+      {link: "xuandat3011@gmail.com",
+      icon: "LogoGmail"},
     ],
   },
   {
-    title: "Hire developers",
+    title: "Trường Lam",
     links: [
-      "Post a job opening",
-      "Post a freelance project",
+      {link: "https://github.com/LeTruongLam",
+      icon: "LogoGitHub"},
+      {link: "truonglam962002@gmail.com",
+      icon: "LogoGmail"},
     ],
   },
   {
-    title: "Brands",
-    links: ["Advertise with us"],
-  },
-  {
-    title: "Company",
+    title: "Hữu Huynh",
     links: [
-      "About",
-      "Careers",
-  
+      {link: "https://www.github.com",
+      icon: "LogoGitHub"},
+      {link: "@gmail.com",
+      icon: "LogoGmail"},
     ],
   },
   {
-    title: "Directories",
+    title: "Nhật Anh",
     links: [
-      "Development jobs",
-      "Developers for hire",
-    
+      {link: "https://www.github.com",
+      icon: "LogoGitHub"},
+      {link: "@gmail.com",
+      icon: "LogoGmail"},
     ],
   },
   {
-    title: "Development assets",
+    title: "Minh Hoàng",
     links: [
-      "Code Marketplace",
-      "GitHub Marketplace",
-   
+      {link: "https://www.github.com",
+      icon: "LogoGitHub"},
+      {link: "@gmail.com",
+      icon: "LogoGmail"},
     ],
-  },
-  {
-    title: "Development Resources",
-    links: [
-      "Freelancing",
-      "Development Hiring",
-    ]
   },
 ];
