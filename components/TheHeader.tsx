@@ -4,9 +4,8 @@ import { NavLinks } from "@/constants";
 import { Button } from "antd";
 import AuthProviders from "./AuthProviders";
 
-const Navbar = async () => {
+const TheHeader = async () => {
   const session = {};
-
   return (
     <nav className="flexBetween navbar">
       <div className="flex-1 flexStart gap-10">
@@ -26,10 +25,10 @@ const Navbar = async () => {
         {session ? (
           <>
             <Button style={{backgroundColor: "black"}} type="primary">
-              <Link href="/login">Đăng nhập</Link>
+              <Link href="/login">Login</Link>
             </Button>
             <Button style={{backgroundColor: "white"}}>
-              <Link href="/register">Đăng ký</Link>
+              <Link href="/register">Register</Link>
             </Button>
           </>
         ) : (
@@ -40,4 +39,4 @@ const Navbar = async () => {
   );
 };
 
-export default Navbar;
+export default TheHeader;

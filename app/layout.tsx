@@ -1,6 +1,6 @@
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import TheHeader from "@/components/TheHeader";
+import TheFooter from "@/components/TheFooter";
 export const metadata = {
   title: "Flexibble",
   description: "Showcase and discover remarable developer projects",
@@ -14,9 +14,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
+        <TheHeader />
         <main>{children}</main>
-        <Footer />
+        <TheFooter />
       </body>
     </html>
   );

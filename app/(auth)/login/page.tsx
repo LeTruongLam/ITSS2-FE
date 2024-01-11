@@ -9,31 +9,40 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+
 const TheLogin = () => {
   const router = useRouter();
   const [user, setUser] = useState({
-    email: "",
-    password: "",
+    user: {
+      email: "",
+      password: "",
+    },
   });
 
   const handleInputChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+    setUser({
+      ...user,
+      user: { ...user.user, [e.target.name]: e.target.value },
+    });
   };
+
   const validateForm = () => {
     let isValid = true;
 
-    if (!user.email) {
+    if (!user.user.email) {
       message.warning("Please enter your email");
       isValid = false;
     }
 
-    if (!user.password) {
+    if (!user.user.password) {
       message.warning("Please enter your password");
       isValid = false;
     }
     return isValid;
   };
+
   const handleLogin = async (e) => {
+    console.log(user);
     e.preventDefault();
     if (validateForm()) {
       try {
@@ -78,14 +87,14 @@ const TheLogin = () => {
                 placeholder="Enter your email"
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 name="email"
-                value={user.email}
+                value={user.user.email}
                 onChange={handleInputChange}
               />
               <Input.Password
                 className="mb-3 flexCenter"
                 placeholder="Enter password"
                 name="password"
-                value={user.password}
+                value={user.user.password}
                 onChange={handleInputChange}
                 iconRender={(visible) =>
                   visible ? (
@@ -116,7 +125,7 @@ const TheLogin = () => {
                 </Link>
               </div>
               <span className="text-sm flex justify-end">
-                Don't you have an account? 
+                Don't you have an account?
                 <Link className="ml-2 underline text-blue-500" href="/register">
                   Register
                 </Link>
