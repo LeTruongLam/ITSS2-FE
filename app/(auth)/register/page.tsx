@@ -1,12 +1,18 @@
-"use client"
-
+"use client";
 import React, { useState } from "react";
 import "../login/login.css";
-import { Button, Input } from "antd";
-import { EyeInvisibleOutlined, EyeTwoTone, UserOutlined } from "@ant-design/icons";
+import { Button, Input, message } from "antd";
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  UserOutlined,
+} from "@ant-design/icons";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const TheRegister = () => {
+  const router = useRouter();
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [user, setUser] = useState({
     username: "",
@@ -14,16 +20,53 @@ const TheRegister = () => {
     email: "",
     nickname: "",
   });
-
   const handleInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
+  const validateForm = () => {
+    let isValid = true;
+    if (!user.username) {
+      message.warning("Please enter your username");
+      isValid = false;
+    }
 
+    if (!user.nickname) {
+      message.warning("Please enter your nickname");
+      isValid = false;
+    }
+
+    if (!user.email) {
+      message.warning("Please enter your email");
+      isValid = false;
+    }
+
+    if (!user.password) {
+      message.warning("Please enter your password");
+      isValid = false;
+    }
+    return isValid;
+  };
   const handleRegister = (e) => {
     e.preventDefault();
-    // Thực hiện logic đăng ký ở đây
-    console.log("Đăng ký thành công!");
-    console.log(user);
+    if (validateForm()) {
+      fetch("/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // Xử lý phản hồi từ máy chủ sau khi đăng ký thành công
+          message.success("Đăng ký thành công");
+          router.push("/login");
+        })
+        .catch((error) => {
+          // Xử lý khi có lỗi xảy ra
+          message.error(error.message);
+        });
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -75,7 +118,11 @@ const TheRegister = () => {
               />
               <div className="mb-3 flexCenter">
                 <Button
-                  style={{ backgroundColor: "black", marginTop: "16px", width: "100%" }}
+                  style={{
+                    backgroundColor: "black",
+                    marginTop: "16px",
+                    width: "100%",
+                  }}
                   type="primary"
                   htmlType="submit"
                 >
@@ -84,7 +131,7 @@ const TheRegister = () => {
               </div>
               <span className="text-sm flex justify-end">
                 Do you have an account?
-                <Link className="underline text-blue-500" href="/login">
+                <Link className="underline ml-2 text-blue-500" href="/login">
                   Login
                 </Link>
               </span>
