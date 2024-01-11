@@ -15,25 +15,18 @@ const TheRegister = () => {
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [user, setUser] = useState({
-    username: "",
-    password: "",
     email: "",
+    password: "",
+    name: "",
     nickname: "",
   });
+
   const handleInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
+
   const validateForm = () => {
     let isValid = true;
-    if (!user.username) {
-      message.warning("Please enter your username");
-      isValid = false;
-    }
-
-    if (!user.nickname) {
-      message.warning("Please enter your nickname");
-      isValid = false;
-    }
 
     if (!user.email) {
       message.warning("Please enter your email");
@@ -44,26 +37,46 @@ const TheRegister = () => {
       message.warning("Please enter your password");
       isValid = false;
     }
+
+    if (!user.name) {
+      message.warning("Please enter your name");
+      isValid = false;
+    }
+
+    if (!user.nickname) {
+      message.warning("Please enter your nickname");
+      isValid = false;
+    }
+
     return isValid;
   };
+
   const handleRegister = (e) => {
     e.preventDefault();
     if (validateForm()) {
+      const userData = {
+        user: {
+          email: user.email,
+          password: user.password,
+          name: user.name,
+          nickname: user.nickname,
+        },
+      };
       fetch("/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify(userData),
       })
         .then((response) => response.json())
         .then((data) => {
-          // Xử lý phản hồi từ máy chủ sau khi đăng ký thành công
+          // Handle the response from the server after successful registration
           message.success("Đăng ký thành công");
           router.push("/login");
         })
         .catch((error) => {
-          // Xử lý khi có lỗi xảy ra
+          // Handle errors that occur
           message.error(error.message);
         });
     }
@@ -82,28 +95,14 @@ const TheRegister = () => {
             <form className="m-4" onSubmit={handleRegister}>
               <Input
                 className="mb-3 flexCenter"
-                placeholder="Enter your user name"
-                name="username"
-                value={user.username}
-                onChange={handleInputChange}
-              />
-              <Input
-                className="mb-3 flexCenter"
-                placeholder="Enter your nick name"
-                name="nickname"
-                value={user.nickname}
-                onChange={handleInputChange}
-              />
-              <Input
-                className="mb-3 flexCenter"
                 placeholder="Enter your Email"
                 name="email"
                 value={user.email}
                 onChange={handleInputChange}
               />
-              <Input.Password
+              <Input
                 className="mb-3 flexCenter"
-                placeholder="Enter password"
+                placeholder="Enter your password"
                 name="password"
                 value={user.password}
                 onChange={handleInputChange}
@@ -115,6 +114,20 @@ const TheRegister = () => {
                   )
                 }
                 visible={passwordVisible}
+              />
+              <Input
+                className="mb-3 flexCenter"
+                placeholder="Enter your name"
+                name="name"
+                value={user.name}
+                onChange={handleInputChange}
+              />
+              <Input
+                className="mb-3 flexCenter"
+                placeholder="Enter your nickname"
+                name="nickname"
+                value={user.nickname}
+                onChange={handleInputChange}
               />
               <div className="mb-3 flexCenter">
                 <Button
@@ -131,7 +144,7 @@ const TheRegister = () => {
               </div>
               <span className="text-sm flex justify-end">
                 Do you have an account?
-                <Link className="underline ml-2 text-blue-500" href="/login">
+                <Link className="underline text-blue-500" href="/login">
                   Login
                 </Link>
               </span>
