@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { NavLinks } from "@/constants";
-
+import { Button } from "antd";
 import AuthProviders from "./AuthProviders";
 
 const Navbar = async () => {
@@ -25,7 +25,12 @@ const Navbar = async () => {
       <div className="flexCenter gap-4">
         {session ? (
           <>
-            <Link href="/create-project">Share work</Link>
+            <Button style={{backgroundColor: "black"}} type="primary">
+              <Link href="/login">Đăng nhập</Link>
+            </Button>
+            <Button style={{backgroundColor: "white"}}>
+              <Link href="/register">Đăng ký</Link>
+            </Button>
           </>
         ) : (
           <AuthProviders />
