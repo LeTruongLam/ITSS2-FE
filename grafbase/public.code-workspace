@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"name": "public",
+			"path": "../../../Downloads/dribbble_clone_public/public"
+		},
+		{
+			"name": "nextjs",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
