@@ -2,23 +2,26 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import LogoPurple from "../public/logo-purple.svg";
+import LogoFaceBook from "../public/logo-facebook.svg";
+import LogoGitHub from "../public/logo-github.svg";
 import { footerLinks } from "@/constants";
+type Link = { link: string; icon: string };
 type ColumnProps = {
   title: string;
-  links: Array<string>;
+  links: Array<Link>;
 };
 
 const FooterColumn = ({ title, links }: ColumnProps) => (
   <div className="footer_column">
     <h4 className="font-semibold">{title}</h4>
-    <ul className="flex flex-col gap-2 font-normal">
-      {links.map((link) => (
-        <Link href="/" key={link}>
-          {link}
+    <div style={{ display: 'flex', gap: "10px" }}>
+      {links.map((e) => (
+        <Link href={e.link}>
+          <Image src={e.icon === "LogoFaceBook" ? LogoFaceBook : LogoGitHub} width={32} height={32} alt={e.icon} />
         </Link>
       ))}
-    </ul>
-  </div>
+    </div>
+  </div >
 );
 const Footer = () => {
   return (
@@ -27,9 +30,7 @@ const Footer = () => {
         <div className="flex items-start flex-col">
           <Image src={LogoPurple} width={115} height={38} alt="Flexibble" />
           <p className="text-start text-sm font-normal mt-5 max-w-xs">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec
-            turpis tincidunt, scelerisque tortor at, commodo velit. Fusce et
-            semper dolor.
+            Gioi thieu nhom.
           </p>
         </div>
         <div className="flex flex-wrap gap-12">
