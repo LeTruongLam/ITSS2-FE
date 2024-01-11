@@ -16,7 +16,7 @@ const FooterColumn = ({ title, links }: ColumnProps) => (
     <h4 className="font-semibold text-slate-200 text-xl">{title}</h4>
     <div style={{ display: 'flex', gap: "10px" }}>
       {links.map((e) => (
-        <a href={e.link.includes("@gmail.com") ? "mailto:e.link" : e.link}>
+        <a href={e.link.includes("@gmail.com") ? `mailto:${e.link}` : e.link}>
           <Image src={e.icon === "LogoGmail" ? LogoGmail : LogoGitHub} width={32} height={32} alt={e.icon} />
         </a>
       ))}
