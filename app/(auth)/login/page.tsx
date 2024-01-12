@@ -19,7 +19,7 @@ const TheLogin = () => {
     },
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     setUser({
       ...user,
       user: { ...user.user, [e.target.name]: e.target.value },
@@ -41,7 +41,7 @@ const TheLogin = () => {
     return isValid;
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: any) => {
     console.log(user);
     e.preventDefault();
     if (validateForm()) {
@@ -55,15 +55,19 @@ const TheLogin = () => {
         });
         console.log(res);
         if (res.ok) {
-          const data = await res.json();
-          const token = data.token;
-          localStorage.setItem("token", token); // Lưu token vào localStorage
-          message.success("Đăng nhập thành công!");
-          router.push("/");
+          const token = res.headers.get('Authorization');
+          if (token !== null) {
+            localStorage.setItem("token", token);
+            message.success("Đăng nhập thành công!");
+            router.push("/");
+          } else {
+            // Handle the case where the token is null, if needed
+            console.error("Token is null");
+          }
         } else {
           message.error("Thông tin tài khoản hoặc mật khẩu không chính xác");
         }
-      } catch (error) {
+      } catch (error: any) {
         message.error(error.message);
       }
     }

@@ -21,7 +21,7 @@ const TheRegister = () => {
     nickname: "",
   });
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
@@ -51,7 +51,7 @@ const TheRegister = () => {
     return isValid;
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = (e: any) => {
     e.preventDefault();
     if (validateForm()) {
       const userData = {
