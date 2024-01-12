@@ -62,7 +62,7 @@ const TheRegister = () => {
           nickname: user.nickname,
         },
       };
-      fetch("/auth/register", {
+      fetch("http://localhost:3001/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

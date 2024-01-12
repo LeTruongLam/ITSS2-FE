@@ -25,7 +25,7 @@ export const footerLinks = [
   {
     title: "Hữu Huynh",
     links: [
-      {link: "https://www.github.com",
+      {link: "https://github.com/betty2310",
       icon: "LogoGitHub"},
       {link: "@gmail.com",
       icon: "LogoGmail"},
