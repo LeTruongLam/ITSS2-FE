@@ -53,13 +53,16 @@ const TheLogin = () => {
           },
           body: JSON.stringify(user),
         });
-        console.log(res);
         if (res.ok) {
+
           const data = await res.json();
           const token = data.token;
+          console.log("Hi")
+          console.log(data.status.data.user)
+
           localStorage.setItem("token", token); // Lưu token vào localStorage
-          message.success("Đăng nhập thành công!");
-          router.push("/");
+          message.success(data.status.message);
+          router.push("/collections");
         } else {
           message.error("Thông tin tài khoản hoặc mật khẩu không chính xác");
         }

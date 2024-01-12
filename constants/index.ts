@@ -1,6 +1,6 @@
 export const NavLinks = [
   { href: "/", key: "Home", text: "Home" },
-  { href: "/", key: "Your library", text: "Your library" },
+  { href: "/collections", key: "Your library", text: "Your library" },
 ];
 
 export const footerLinks = [
