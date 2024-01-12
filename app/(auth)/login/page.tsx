@@ -53,13 +53,13 @@ const TheLogin = () => {
           },
           body: JSON.stringify(user),
         });
-        console.log(res);
         if (res.ok) {
+          const data = await res.json();
           const token = res.headers.get('Authorization');
           if (token !== null) {
             localStorage.setItem("token", token);
-            message.success("Đăng nhập thành công!");
-            router.push("/");
+            message.success(data.status.message);
+            router.push("/collections");
           } else {
             // Handle the case where the token is null, if needed
             console.error("Token is null");
