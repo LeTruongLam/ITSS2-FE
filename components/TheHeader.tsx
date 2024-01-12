@@ -1,11 +1,20 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { NavLinks } from "@/constants";
 import { Button } from "antd";
 import AuthProviders from "./AuthProviders";
+import React, { useState, useEffect } from "react";
+const TheHeader = () => {
+  const [session, setSession] = useState(null);
 
-const TheHeader = async () => {
-  const session = {};
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const sessionData = localStorage.getItem("token");
+      setSession(sessionData);
+    }
+  }, []);
   return (
     <nav className="flexBetween navbar">
       <div className="flex-1 flexStart gap-10">
@@ -14,20 +23,20 @@ const TheHeader = async () => {
         </Link>
         <ul className="xl:flex hidden text-small gap-7">
           {NavLinks.map((link) => (
-            <Link href={link.href} key={link.text}>
-              {link.text}
-            </Link>
+            <li key={link.text}>
+              <Link href={link.href}>{link.text}</Link>
+            </li>
           ))}
         </ul>
       </div>
 
       <div className="flexCenter gap-4">
-        {session ? (
+        {!session ? (
           <>
-            <Button style={{backgroundColor: "black"}} type="primary">
+            <Button style={{ backgroundColor: "black" }} type="primary">
               <Link href="/login">Login</Link>
             </Button>
-            <Button style={{backgroundColor: "white"}}>
+            <Button style={{ backgroundColor: "white" }}>
               <Link href="/register">Register</Link>
             </Button>
           </>
