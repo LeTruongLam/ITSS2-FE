@@ -1,4 +1,14 @@
 'use client'
+
+import "./home.css";
+import Image from "next/image";
+import Image1 from "../assets/img/guy-lesson.png";
+import Icon1 from "../assets/icons/ui-ux.svg";
+import Icon2 from "../assets/icons/dev.svg";
+import Icon3 from "../assets/icons/mkt.svg";
+import Icon4 from "../assets/icons/watch.svg";
+// import LogoGmail from "../public/logo-gmail.svg";
+// import LogoGitHub from "../public/logo-github.svg";
 const Home = () => {
   return (
     <section className="flex-start flex-col paddings mb-16">
@@ -6,28 +16,30 @@ const Home = () => {
         <div className="content">
           <div className="body">
             <div className="hero-media">
-              <img
-                src="./assets/img/guy-lesson.png"
-                alt="Learn without limits and spread knowledge."
-                className="img"
-              />
+              <Image src={Image1} className="img" alt="Learn without limits and spread knowledge." />
               <div className="hero-summary">
                 <div className="item">
-                  <div className="icon"><img src="./assets/icons/ui-ux.svg" alt="UI/UX" /></div>
+                  <div className="icon">
+                    <Image src={Icon1} alt="UI/UX" />
+                  </div>
                   <div className="info">
                     <p className="label">20 Courses</p>
                     <p className="title">UI/UX Design</p>
                   </div>
                 </div>
                 <div className="item">
-                  <div className="icon"><img src="./assets/icons/dev.svg" alt="Dev" /></div>
+                  <div className="icon">
+                    <Image src={Icon2} alt="Dev" />
+                  </div>
                   <div className="info">
                     <p className="label">20 Courses</p>
                     <p className="title">Development</p>
                   </div>
                 </div>
                 <div className="item">
-                  <div className="icon"><img src="./assets/icons/mkt.svg" alt="MKT" /></div>
+                  <div className="icon">
+                    <Image src={Icon3} alt="MKT" />
+                  </div>
                   <div className="info">
                     <p className="label">30 Courses</p>
                     <p className="title">Marketing</p>
@@ -46,7 +58,9 @@ const Home = () => {
                 <div className="hero-watch">
                   <div className="icon">
                     <a href="#!" className="">
-                      <div className="icon"><img src="./assets/icons/watch.svg" alt="Watch" /></div>
+                      <div className="icon">
+                        <Image src={Icon4} alt="Watch" />
+                      </div>
                     </a>
                   </div>
                   <span>Watch Video</span>
