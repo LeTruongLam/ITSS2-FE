@@ -5,7 +5,7 @@ export const NavLinks = [
 
 export const footerLinks = [
   {
-    title: "Xuân Đạt",
+    title: "Xuan Dat",
     links: [
       {link: "https://www.github.com/xd3011",
       icon: "LogoGitHub"},
@@ -14,7 +14,7 @@ export const footerLinks = [
     ],
   },
   {
-    title: "Trường Lam",
+    title: "Truong Lam",
     links: [
       {link: "https://github.com/LeTruongLam",
       icon: "LogoGitHub"},
@@ -23,7 +23,7 @@ export const footerLinks = [
     ],
   },
   {
-    title: "Hữu Huynh",
+    title: "Huu Huynh",
     links: [
       {link: "https://github.com/betty2310",
       icon: "LogoGitHub"},
@@ -32,18 +32,18 @@ export const footerLinks = [
     ],
   },
   {
-    title: "Nhật Anh",
+    title: "Nhat Anh",
     links: [
-      {link: "https://www.github.com",
+      {link: "https://github.com/Luvannie",
       icon: "LogoGitHub"},
       {link: "@gmail.com",
       icon: "LogoGmail"},
     ],
   },
   {
-    title: "Minh Hoàng",
+    title: "Minh Hoang",
     links: [
-      {link: "https://www.github.com",
+      {link: "https://github.com/nyrddryn",
       icon: "LogoGitHub"},
       {link: "@gmail.com",
       icon: "LogoGmail"},
