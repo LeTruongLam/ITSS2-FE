@@ -3,7 +3,7 @@ import { FolderOpenOutlined, DeleteOutlined } from "@ant-design/icons";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button, message } from "antd";
-
+import "../../globals.css"
 const TheDeck = ({ params }) => {
   const [datas, setDatas] = useState([]);
 
@@ -60,7 +60,7 @@ const TheDeck = ({ params }) => {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-8 height-wrapper">
       <div className="flex justify-between">
         <div className="text-2xl font-bold">
           <FolderOpenOutlined />

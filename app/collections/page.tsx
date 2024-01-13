@@ -47,7 +47,7 @@ const Collection = () => {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-8 height-wrapper">
       <div className="flex justify-between">
         <div className="text-2xl font-bold">Thư mục của bạn</div>
         <Button

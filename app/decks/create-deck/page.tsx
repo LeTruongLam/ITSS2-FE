@@ -43,7 +43,7 @@ const CreateDeck = () => {
   };
 
   return (
-    <div className="p-8">
+    <div className="p-8 height-wrapper">
       <div className="flex justify-between">
         <div className="text-2xl font-bold">
           <span className="ml-2">Tạo bộ thẻ</span>

@@ -3,14 +3,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-.flip-card{
+.flip-card {
   perspective: 1000px;
 }
 .flip-card-inner {
   transition: transform 0.5s;
   transform-style: preserve-3d;
 }
-.flip-card-front,.flip.card-back {
+.flip-card-front,
+.flip.card-back {
   position: absolute;
   backface-visibility: hidden;
 }
@@ -19,8 +20,9 @@
   transform: rotateY(180deg);
 }
 
-
-
+.height-wrapper {
+  height: calc(100vh - 72px);
+}
 * {
   margin: 0;
   padding: 0;
