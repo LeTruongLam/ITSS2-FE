@@ -4,7 +4,7 @@ import { Input, Select, Button } from "antd";
 
 const { Option } = Select;
 
-const CreateDeck = () => {
+const CreateDeck = (props: any) => {
   const [cards, setCards] = useState([]);
   const [frontCard, setFrontCard] = useState("");
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
