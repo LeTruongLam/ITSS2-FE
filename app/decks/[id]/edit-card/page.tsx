@@ -5,18 +5,11 @@ import { Input, Select, Button } from "antd";
 const { Option } = Select;
 
 const CreateDeck = () => {
-  const url = window.location.href;
-
-  const [deckId, setDeckId] = useState();
   const [cards, setCards] = useState([]);
   const [frontCard, setFrontCard] = useState("");
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  useEffect(() => {
-    const id = url.split("/")[4];
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const parent_id = props.params?.id;
 
-    setDeckId(id);
-  }, []);
   const handleAddCard = () => {
     setCards([
       ...cards,
