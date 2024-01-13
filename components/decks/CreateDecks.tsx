@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Input, message } from "antd";
 
-const CreateDeck = ({ setShowCreateDeck, id }) => {
+const CreateDeck = ({ setShowCreateDeck, id, fetchData }) => {
   const [value, setValue] = useState({
     name: "",
     parent_id: id,
@@ -36,6 +36,7 @@ const CreateDeck = ({ setShowCreateDeck, id }) => {
       });
 
       if (res.ok) {
+        fetchData();
         setShowCreateDeck(false);
         message.success("Tạo thư mục thành công");
       } else {

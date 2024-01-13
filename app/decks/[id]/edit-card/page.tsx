@@ -1,40 +1,58 @@
 "use client"
-import React, { useState } from "react";
-import { Input, Select, Button } from "antd";
-
-const { Option } = Select;
+import React, { useState, useEffect } from "react";
+import { Input, Button } from "antd";
 
 const CreateDeck = () => {
+  const url = window.location.href;
+
+  const [deckId, setDeckId] = useState("");
   const [cards, setCards] = useState([]);
-  const [deckName, setDeckName] = useState("");
-  const [selectedFolder, setSelectedFolder] = useState("default");
+
+  useEffect(() => {
+    const id = url.split("/")[4];
+    setDeckId(id);
+  }, [url]);
 
   const handleAddCard = () => {
-    setCards([
-      ...cards,
-      { front: "", definition: "", synonyms: "", example: "" },
+    setCards((prevCards) => [
+      ...prevCards,
+      {
+        front: "",
+        back: {
+          definition: "",
+          synonyms: "",
+          example: "",
+        },
+        deck_id: deckId,
+      },
     ]);
   };
 
   const handleCardChange = (index, field, value) => {
-    const updatedCards = [...cards];
-    updatedCards[index] = {
-      ...updatedCards[index],
-      [field]: value,
-    };
-    setCards(updatedCards);
+    setCards((prevCards) => {
+      const updatedCards = [...prevCards];
+      const updatedCard = {
+        ...updatedCards[index],
+        back: {
+          ...updatedCards[index].back,
+          [field]: value,
+        },
+      };
+      updatedCards[index] = updatedCard;
+      return updatedCards;
+    });
   };
 
   const handleRemoveCard = (index) => {
-    const updatedCards = cards.filter((_, cardIndex) => cardIndex !== index);
-    setCards(updatedCards);
+    setCards((prevCards) => {
+      const updatedCards = [...prevCards];
+      updatedCards.splice(index, 1);
+      return updatedCards;
+    });
   };
 
   const handleCreateDeck = () => {
-    // Thực hiện xử lý lưu trữ bộ thẻ và các logic liên quan ở đây
     const deck = {
-      name: deckName,
-      folder: selectedFolder,
       cards: cards,
     };
     console.log("Bộ thẻ đã được tạo:", deck);
@@ -50,25 +68,6 @@ const CreateDeck = () => {
         </div>
       </div>
       <div>
-        <div className="my-4">
-          <label htmlFor="folder-select">Chọn thư mục:</label>
-          <Select
-            id="folder-select"
-            defaultValue="default"
-            value={selectedFolder}
-            onChange={setSelectedFolder}
-          >
-            {/* Thêm các tùy chọn thư mục vào đây */}
-          </Select>
-        </div>
-        {/* <div className="my-4">
-          <label htmlFor="deck-name-input">Tên bộ thẻ:</label>
-          <Input
-            id="deck-name-input"
-            value={deckName}
-            onChange={(e) => setDeckName(e.target.value)}
-          />
-        </div> */}
         <div className="my-4">
           {cards.map((card, index) => (
             <div key={index} className="flex gap-6">
@@ -92,12 +91,12 @@ const CreateDeck = () => {
                   <div className="flex gap-6">
                     <Input
                       id={`definition-input-${index}`}
-                      value={card.definition}
+                      value={card.back.definition}
                       onChange={(e) =>
                         handleCardChange(index, "definition", e.target.value)
                       }
                     />
-                    <Button>Gửi</Button>
+                    <Button onClick={() => handleCardChange(index, "definition", card.back.definition)}>Gửi</Button>
                   </div>
                 </div>
                 <div>
@@ -107,12 +106,12 @@ const CreateDeck = () => {
                   <div className="flex gap-6">
                     <Input
                       id={`synonyms-input-${index}`}
-                      value={card.synonyms}
+                      value={card.back.synonyms}
                       onChange={(e) =>
                         handleCardChange(index, "synonyms", e.target.value)
                       }
                     />
-                    <Button>Gửi</Button>
+                    <Button onClick={() => handleCardChange(index, "synonyms", card.back.synonyms)}>Gửi</Button>
                   </div>
                 </div>
                 <div>
@@ -120,12 +119,12 @@ const CreateDeck = () => {
                   <div className="flex gap-6">
                     <Input
                       id={`example-input-${index}`}
-                      value={card.example}
+                      value={card.back.example}
                       onChange={(e) =>
                         handleCardChange(index, "example", e.target.value)
                       }
                     />
-                    <Button>Gửi</Button>
+                    <Button onClick={() => handleCardChange(index, "example", card.back.example)}>Gửi</Button>
                   </div>
                 </div>
               </div>

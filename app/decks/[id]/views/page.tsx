@@ -4,7 +4,7 @@ import Card from './Card';
 
 const Quizlet = () => {
   return (
-    <div>
+    <div className='height-wrapper '>
       <Card  />
     </div>
   );
