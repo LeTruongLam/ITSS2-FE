@@ -48,6 +48,84 @@ const CreateDeck = (props: any) => {
     // ...
   };
 
+  const handleGenerateDefinition = async (index: any, front: string) => {
+    const value = { "word": front }
+    console.log(value);
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/card/def`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify(value),
+      });
+      if (res.status === 401) {
+        // Xử lý trường hợp không xác thực thành công
+        console.log("Unauthorized");
+        return;
+      }
+      const data = await res.json();
+      const result = data.res.split('\n')[1];
+      handleCardChange(index, "back.definition", result);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách thư mục:", error);
+    }
+  };
+
+  const handleGenerateSynonym = async (index: any, front: string) => {
+    const value = { "word": front }
+    console.log(value);
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/card/usage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify(value),
+      });
+      if (res.status === 401) {
+        // Xử lý trường hợp không xác thực thành công
+        console.log("Unauthorized");
+        return;
+      }
+      const data = await res.json();
+      const result = data.res.split('\n')[1];
+      handleCardChange(index, "back.synonyms", result);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách thư mục:", error);
+    }
+  };
+
+  const handleGenerateExample = async (index: any, front: string) => {
+    const value = { "word": front }
+    console.log(value);
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/card/ex`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify(value),
+      });
+      if (res.status === 401) {
+        // Xử lý trường hợp không xác thực thành công
+        console.log("Unauthorized");
+        return;
+      }
+      const data = await res.json();
+      const result = data.res.split('\n')[1];
+      handleCardChange(index, "back.example", result);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách thư mục:", error);
+    }
+  };
+
   return (
     <div className="p-8 height-wrapper ">
       <div className="flex justify-between">
@@ -108,12 +186,18 @@ const CreateDeck = (props: any) => {
                         handleCardChange(index, "definition", e.target.value)
                       }
                     />
-                    <Button>Gửi</Button>
+                    <Button
+                      className="bg-lime-700"
+                      type="primary"
+                      onClick={() => handleGenerateDefinition(index, card.front)}
+                    >
+                      Gửi
+                    </Button>
                   </div>
                 </div>
                 <div>
                   <label htmlFor={`synonyms-input-${index}`}>
-                    Từ đồng nghĩa:
+                    Cách dùng:
                   </label>
                   <div className="flex gap-6">
                     <Input
@@ -123,7 +207,13 @@ const CreateDeck = (props: any) => {
                         handleCardChange(index, "synonyms", e.target.value)
                       }
                     />
-                    <Button>Gửi</Button>
+                    <Button
+                      className="bg-lime-700"
+                      type="primary"
+                      onClick={() => handleGenerateSynonym(index, card.front)}
+                    >
+                      Gửi
+                    </Button>
                   </div>
                 </div>
                 <div>
@@ -136,7 +226,13 @@ const CreateDeck = (props: any) => {
                         handleCardChange(index, "example", e.target.value)
                       }
                     />
-                    <Button>Gửi</Button>
+                    <Button
+                      className="bg-lime-700"
+                      type="primary"
+                      onClick={() => handleGenerateExample(index, card.front)}
+                    >
+                      Gửi
+                    </Button>
                   </div>
                 </div>
               </div>
