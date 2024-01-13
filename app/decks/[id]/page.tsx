@@ -4,14 +4,14 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button, message } from "antd";
 import CreateDeck from "../../../components/decks/CreateDecks";
-import EditDecks from "../../components/collections/EditFolder";
+import EditDecks from "../../../components/collections/EditFolder";
 
 const TheDeck = (props: any) => {
 
   const [showCreateDeck, setShowCreateDeck] = useState(false);
   const [showEditDeck, setShowEditDeck] = useState(false);
   const [editDeck, setEditDeck] = useState({});
-  const [deck, setDeck] = useState([]);
+  // const [deck, setDeck] = useState([]);
   const [decks, setDecks] = useState([]);
 
   // const token = localStorage.getItem("token");
@@ -20,7 +20,7 @@ const TheDeck = (props: any) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [decks]);
 
   const fetchData = async () => {
     try {
@@ -75,7 +75,6 @@ const TheDeck = (props: any) => {
 
       if (response.ok) {
         message.success("Đã xóa!");
-        fetchData();
       } else {
         throw new Error("Không thể xóa thẻ");
       }
@@ -99,7 +98,7 @@ const TheDeck = (props: any) => {
         {decks.children && decks.children.map((deck: any) => (
           <Link
             key={deck.id}
-            href={`/decks/${deck.id}/cards`}
+            href={`/decks/${deck.id}/views`}
             className="w-[23%] h-56 shadow-md hover:shadow-xl rounded-2xl border border-slate-200"
           >
             <div className="flex flex-col m-4 justify-between h-full pb-8">
@@ -130,6 +129,9 @@ const TheDeck = (props: any) => {
       </div>
       {showCreateDeck && (
         <CreateDeck setShowCreateDeck={setShowCreateDeck} id={parent_id} />
+      )}
+      {showEditDeck && (
+        <EditDecks setShowEditFolder={setShowEditDeck} name={editDeck.name} parent_id={editDeck.parent_id} id={editDeck.id} />
       )}
     </div>
   );
