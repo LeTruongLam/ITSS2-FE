@@ -110,7 +110,7 @@ const TheDeck = (props: any) => {
           decks.children.map((deck: any) => (
             <Link
               key={deck.id}
-              href={`/decks/${deck.id}/edit-card`}
+              href={`/decks/${deck.id}/views`}
               className="w-[23%] h-56 shadow-md hover:shadow-xl rounded-2xl border border-slate-200"
             >
               <div className="flex flex-col m-4 justify-between h-full pb-8">

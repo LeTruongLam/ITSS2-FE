@@ -5,16 +5,20 @@ import Link from "next/link";
 import { Button, message } from "antd";
 import CreateFolder from "../../components/collections/CreateFolder";
 import EditFolder from "../../components/collections/EditFolder";
-import { DeleteOutlined, EditOutlined, FolderOpenOutlined } from "@ant-design/icons";
-
+import {
+  DeleteOutlined,
+  EditOutlined,
+  FolderOpenOutlined,
+} from "@ant-design/icons";
+import { MoreOutlined } from "@ant-design/icons";
 const Collection = () => {
-
   const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [showEditFolder, setShowEditFolder] = useState(false);
   const [folders, setFolders] = useState([]);
   const [editFolder, setEditFolder] = useState({});
   // const token = localStorage.getItem("token");
-  const token = typeof window !== 'undefined' ? localStorage.getItem("token") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   useEffect(() => {
     fetchData();
@@ -94,12 +98,13 @@ const Collection = () => {
             className="w-[23%] h-56 shadow-md hover:shadow-xl rounded-2xl border border-slate-200"
           >
             <div className="flex flex-col m-4 justify-between h-full pb-8">
-              <div>
+              <div className="flex justify-between align-middle">
                 <p className="text-ml mb-4 font-bold">{folder.name}</p>
-                {/* <p className="mb-3">Mô tả</p> */}
+                <p>
+                  <MoreOutlined className="bg-slate-300 p-1 rounded-full font-bold " />
+                </p>
               </div>
               <div className="flex justify-between">
-                <span className="">Ngày cập nhật bộ thẻ</span>
                 <div>
                   <EditOutlined
                     style={{ fontSize: "24px" }}
@@ -124,7 +129,12 @@ const Collection = () => {
         <CreateFolder setShowCreateFolder={setShowCreateFolder} />
       )}
       {showEditFolder && (
-        <EditFolder setShowEditFolder={setShowEditFolder} name={editFolder.name} parent_id={editFolder.parent_id} id={editFolder.id} />
+        <EditFolder
+          setShowEditFolder={setShowEditFolder}
+          name={editFolder.name}
+          parent_id={editFolder.parent_id}
+          id={editFolder.id}
+        />
       )}
     </div>
   );

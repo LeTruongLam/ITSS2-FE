@@ -1,17 +1,38 @@
-import React, { useState } from "react";
+"use client";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./views.css";
 
-const Card = () => {
-  const cardData = [
-    { id: 1, frontContent: "Front of Card 1", backContent: "Back of Card 1" },
-    { id: 2, frontContent: "Front of Card 2", backContent: "Back of Card 2" },
-    { id: 3, frontContent: "Front of Card 3", backContent: "Back of Card 3" },
-    // Thêm các thẻ khác vào đây
-  ];
+const Card = ({ deck_id }) => {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
+  const [cardData, setCardData] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  useEffect(() => {
+    const fetchCardData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/decks/${deck_id}/cards`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `${token}` ,
+            },
+          }
+        );
+        const data = await response.json();
+        setCardData(data);
+      } catch (error) {
+        console.error("Error fetching card data:", error);
+      }
+    };
+
+    fetchCardData();
+  }, [deck_id, token]);
 
   const handleFlip = () => {
     if (!isAnimating) {
@@ -54,11 +75,11 @@ const Card = () => {
           >
             {isFlipped ? (
               <div className="flex items-center justify-center flip-card-back w-[100%] h-[100%] bg-cover text-black p-4 shadow-md hover:shadow-xl rounded-2xl border border-slate-200">
-                <h1>{cardData[currentCardIndex].frontContent}</h1>
+                <h1>{cardData[currentCardIndex]?.front}</h1>
               </div>
             ) : (
               <div className="flex items-center justify-center flip-card-front w-[100%] h-[100%] bg-cover text-black shadow-md hover:shadow-xl rounded-2xl border border-slate-200 p-4">
-                <h1>{cardData[currentCardIndex].backContent}</h1>
+                <h1>{cardData[currentCardIndex]?.back}</h1>
               </div>
             )}
           </motion.div>
