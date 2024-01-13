@@ -1,9 +1,53 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import { Input, message } from "antd";
 
-const CreateFolder = ({setShowCreateFolder}) => {
-    const handleClose = () => {
+const CreateFolder = ({ setShowCreateFolder }) => {
+  const [value, setValue] = useState({
+    name: "",
+    parent_id: "",
+  });
+
+  const handleClose = () => {
+    setShowCreateFolder(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setValue((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleCreateFolder = async () => {
+    // Xử lý logic tạo thư mục ở đây
+    const token = localStorage.getItem("token");
+    console.log(token);
+
+    try {
+      const res = await fetch("http://localhost:3001/decks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: ` ${token}`,
+        },
+        body: JSON.stringify(value),
+      });
+
+      if (res.ok) {
         setShowCreateFolder(false);
-      };
+        message.success("Tạo thư mục thành công");
+      } else {
+        // Xử lý khi tạo thư mục thất bại
+        throw new Error("Lỗi khi tạo thư mục");
+      }
+    } catch (error: any) {
+      // Xử lý khi có lỗi xảy ra
+      message.error(error.message);
+    }
+  };
+
   return (
     <div
       className="relative z-10"
@@ -25,30 +69,31 @@ const CreateFolder = ({setShowCreateFolder}) => {
                   </h3>
                   <div className="mt-2">
                     <div className="mt-2">
-                      <input
+                      <Input
                         id="title"
                         placeholder="Nhập tên thư mục"
-                        name="title"
-                        type="title"
-                        autoComplete="title"
+                        name="name"
+                        value={value.name}
+                        onChange={handleInputChange}
+                        autoComplete="off"
                         required
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset p-2 "
+                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset p-2"
                       />
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className=" px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+            <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
               <button
                 type="button"
-                className="inline-flex w-full justify-center rounded-md bg-lime-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                onClick={handleCreateFolder}
+                className="nline-flex w-full justify-center rounded-md bg-lime-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
               >
                 Tạo thư mục
               </button>
               <button
                 onClick={handleClose}
-                type="button"
                 className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
               >
                 Hủy

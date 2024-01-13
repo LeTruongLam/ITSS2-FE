@@ -16,11 +16,12 @@
     "cloudinary": "^1.41.2",
     "graphql-request": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
-    "next": "14.0.4",
+    "next": "^14.0.4",
     "next-auth": "^4.24.5",
     "node": "20.9.0",
-    "react": "^18",
-    "react-dom": "^18"
+    "react": "^18.2.0",
+    "react-dom": "^18",
+    "react-router-dom": "^6.21.2"
   },
   "devDependencies": {
     "@grafbase/sdk": "^0.14.0",

@@ -1,12 +1,40 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "antd";
 import CreateFolder from "./CreateFolder";
 
 const Collection = () => {
+
   const [showCreateFolder, setShowCreateFolder] = useState(false);
+  const [folders, setFolders] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch("http://localhost:3001/decks", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+      });
+      if (res.status === 401) {
+        // Xử lý trường hợp không xác thực thành công
+        console.log("Unauthorized");
+        return;
+      }
+      const data = await res.json();
+      setFolders(data);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách thư mục:", error);
+    }
+  };
 
   const handleCreateFolder = () => {
     setShowCreateFolder(true);
@@ -25,17 +53,15 @@ const Collection = () => {
         </Button>
       </div>
       <div className="mt-6 flex justify-between gap-8">
-        <Link href="/decks" className="w-4/12 h-56 shadow-md hover:shadow-xl rounded-2xl border border-slate-200">
-            <p className="m-4">Tên thư mục</p>
-        </Link>
-        <Link href="/decks" className="w-4/12 h-56 shadow-md hover:shadow-xl rounded-2xl border border-slate-200">
-            <p className="m-4">Tên thư mục</p>
-        </Link>
-        <Link href="/decks" className="w-4/12 h-56 shadow-md hover:shadow-xl rounded-2xl border border-slate-200">
-            <p className="m-4">Tên thư mục</p>
-        </Link>
-
-        
+        {folders.map((folder) => (
+          <Link
+            key={folder.id}
+            href={`/decks/${folder.id}`}
+            className="w-4/12 h-56 shadow-md hover:shadow-xl rounded-2xl border border-slate-200"
+          >
+            <p className="m-4">{folder.name}</p>
+          </Link>
+        ))}
       </div>
       {showCreateFolder && (
         <CreateFolder setShowCreateFolder={setShowCreateFolder} />
