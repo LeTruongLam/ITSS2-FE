@@ -2,9 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./views.css";
-
+import { renderToString } from "react-dom/server";
+import Item from "antd/es/list/Item";
 const Card = ({ deck_id }) => {
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const [cardData, setCardData] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -20,7 +22,7 @@ const Card = ({ deck_id }) => {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `${token}` ,
+              Authorization: `${token}`,
             },
           }
         );
@@ -79,7 +81,11 @@ const Card = ({ deck_id }) => {
               </div>
             ) : (
               <div className="flex items-center justify-center flip-card-front w-[100%] h-[100%] bg-cover text-black shadow-md hover:shadow-xl rounded-2xl border border-slate-200 p-4">
-                <h1>{cardData[currentCardIndex]?.back}</h1>
+                <h1
+                  dangerouslySetInnerHTML={{
+                    __html: cardData[currentCardIndex]?.back,
+                  }}
+                ></h1>
               </div>
             )}
           </motion.div>
