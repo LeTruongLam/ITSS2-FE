@@ -130,7 +130,7 @@ const CreateDeck = (props: any) => {
     console.log(value);
 
     try {
-      const res = await fetch(`http://localhost:3000/api/card/ex`, {
+      const res = await fetch(`http://localhost:3000/api/card/example`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -144,7 +144,8 @@ const CreateDeck = (props: any) => {
         return;
       }
       const data = await res.json();
-      const result = data.res.split('\n')[1];
+      // const result = data.res.split('\n')[1];
+      const result = data.res;
       setCards((prevCards) => ({
         ...prevCards,
         back: {
