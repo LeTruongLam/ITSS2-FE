@@ -63,14 +63,14 @@ export async function getAICompletions(command: string, word: string) {
 
       ""
 
-      With the /ex command, generate 3 to 5 examples of how to use that word in real life. The returned only example sentence result is a single string, with each example sentence separated by character newline /n, also translate this sentence in ().
+      With the /ex command, generate only 1 examples of how to use that word in real life. The returned only example sentence result is a single string contains sentence and translate it. Sentence and translate sentence is splitted by ' - '
       For example
 
       COMMAND: /ex 楽しい
 
       result
       
-      "楽しいだ/n今日はとても楽しい/n楽しいですか。"
+      "今日はとても楽しい - Today, I feel happy"
       `,
     },
     {

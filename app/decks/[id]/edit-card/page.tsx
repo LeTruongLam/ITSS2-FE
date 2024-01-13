@@ -5,7 +5,7 @@ import { RobotOutlined } from "@ant-design/icons";
 const CreateDeck = (props: any) => {
   const [cards, setCards] = useState({
     front: "",
-    back: { definition: "", synonyms: "", example: "" },
+    back: { definition: "", usage: "", example: "" },
   });
 
   const token =
@@ -15,11 +15,11 @@ const CreateDeck = (props: any) => {
   const handleCreateDeck = async () => {
     console.log("Input:", cards);
     const { front, back } = cards;
-    const { definition, synonyms, example } = back;
+    const { definition, usage, example } = back;
 
     const cardsData = {
       front,
-      back: `<p>${definition}</p><p>${synonyms}</p><p>${example}</p>`,
+      back: `<p>${definition}</p><p>${usage}</p><p>${example}</p>`,
     };
 
     try {
@@ -61,6 +61,103 @@ const CreateDeck = (props: any) => {
     }));
   };
 
+  const handleGenerateDefinition = async (front: string) => {
+    const value = { "word": front }
+    console.log(value);
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/card/def`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify(value),
+      });
+      if (res.status === 401) {
+        // Xử lý trường hợp không xác thực thành công
+        console.log("Unauthorized");
+        return;
+      }
+      const data = await res.json();
+      const result = data.res.split('\n')[1];
+      setCards((prevCards) => ({
+        ...prevCards,
+        back: {
+          ...prevCards.back,
+          definition: result,
+        },
+      }));
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách thư mục:", error);
+    }
+  };
+
+  const handleGenerateUsage = async (front: string) => {
+    const value = { "word": front }
+    console.log(value);
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/card/usage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify(value),
+      });
+      if (res.status === 401) {
+        // Xử lý trường hợp không xác thực thành công
+        console.log("Unauthorized");
+        return;
+      }
+      const data = await res.json();
+      const result = data.res;
+      setCards((prevCards) => ({
+        ...prevCards,
+        back: {
+          ...prevCards.back,
+          usage: result,
+        },
+      }));
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách thư mục:", error);
+    }
+  };
+
+  const handleGenerateExample = async (front: string) => {
+    const value = { "word": front }
+    console.log(value);
+
+    try {
+      const res = await fetch(`http://localhost:3000/api/card/example`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${token}`,
+        },
+        body: JSON.stringify(value),
+      });
+      if (res.status === 401) {
+        // Xử lý trường hợp không xác thực thành công
+        console.log("Unauthorized");
+        return;
+      }
+      const data = await res.json();
+      // const result = data.res.split('\n')[1];
+      const result = data.res;
+      setCards((prevCards) => ({
+        ...prevCards,
+        back: {
+          ...prevCards.back,
+          example: result,
+        },
+      }));
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách thư mục:", error);
+    }
+  };
+
   return (
     <div className="p-8 height-wrapper">
       <div className="flex justify-between">
@@ -89,7 +186,7 @@ const CreateDeck = (props: any) => {
                   <label htmlFor="definition-input">Định nghĩa:</label>
                   <div className="flex gap-6">
                     <Input
-                      addonAfter={<RobotOutlined />}
+                      addonAfter={<RobotOutlined onClick={() => handleGenerateDefinition(cards.front)} />}
                       id="definition-input"
                       name="definition"
                       value={cards.back.definition}
@@ -98,14 +195,16 @@ const CreateDeck = (props: any) => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="synonyms-input">Từ đồng nghĩa:</label>
+                  <label htmlFor={`usage-input`}>
+                    Cách dùng:
+                  </label>
                   <div className="flex gap-6">
                     <Input
-                      addonAfter={<RobotOutlined />}
+                      addonAfter={<RobotOutlined onClick={() => handleGenerateUsage(cards.front)} />}
 
-                      id="synonyms-input"
-                      name="synonyms"
-                      value={cards.back.synonyms}
+                      id="usage-input"
+                      name="usage"
+                      value={cards.back.usage}
                       onChange={handleBackInputChange}
                     />
                   </div>
@@ -114,7 +213,7 @@ const CreateDeck = (props: any) => {
                   <label htmlFor="example-input">Ví dụ:</label>
                   <div className="flex gap-6">
                     <Input
-                      addonAfter={<RobotOutlined />}
+                      addonAfter={<RobotOutlined onClick={() => handleGenerateExample(cards.front)} />}
 
                       id="example-input"
                       name="example"
