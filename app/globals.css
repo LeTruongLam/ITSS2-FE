@@ -21,7 +21,7 @@
 }
 
 .height-wrapper {
-  height: calc(100vh - 72px);
+  min-height: calc(100vh - 72px);
 }
 * {
   margin: 0;
