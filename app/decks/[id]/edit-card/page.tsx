@@ -1,14 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Input, Select, Button } from "antd";
-
-const { Option } = Select;
+import { Input,  Button , message} from "antd";
 
 const CreateDeck = (props: any) => {
   const [cards, setCards] = useState([]);
-  const [frontCard, setFrontCard] = useState("");
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  const parent_id = props.params?.id;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const deck_id = props.params?.id;
 
   const handleAddCard = () => {
     setCards([
@@ -32,18 +30,37 @@ const CreateDeck = (props: any) => {
     setCards(updatedCards);
   };
 
-  const handleCreateDeck = () => {
+  const handleCreateDeck = async () => {
     const deck = {
       cards: cards.map((card) => ({
         front: card.front,
-        back: {
-          definition: card.definition,
-          synonyms: card.synonyms,
-          example: card.example,
-        },
+       
       })),
     };
-    console.log("Bộ thẻ đã được tạo:", deck.cards);
+    console.log("Input:", deck.cards);
+
+    try {
+      const res = await fetch(
+        `http://localhost:3001/decks/${deck_id}/cards`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: ` ${token}`,
+          },
+          body: JSON.stringify(deck.cards),
+        }
+      );
+
+      if (res.ok) {
+        message.success("Tạo thành công");
+      } else {
+        // Xử lý khi tạo thư mục thất bại
+        throw new Error("Lỗi khi tạo ");
+      }
+    } catch (error: any) {
+      message.error(error.message);
+    }
     // Tiến hành lưu trữ bộ thẻ
     // ...
   };
@@ -58,94 +75,73 @@ const CreateDeck = (props: any) => {
       <div>
         <div className="my-4">
           <label htmlFor="folder-select">Chọn thư mục:</label>
-          {/* <Select
-            id="folder-select"
-            defaultValue="default"
-            value={selectedFolder}
-            onChange={setSelectedFolder}
-            className="w-full"
-          >
-            {decks.map((deck) => (
-              <Option key={deck.id} value={deck.id}>
-                {deck.name}
-              </Option>
+          <div className="my-4">
+            {cards.map((card, index) => (
+              <div key={index} className="flex gap-6">
+                <div className="flex-1">
+                  <label htmlFor={`front-input-${index}`}>Mặt trước:</label>
+                  <div className="flex gap-6">
+                    <Input
+                      id={`front-input-${index}`}
+                      value={card.front}
+                      onChange={(e) =>
+                        handleCardChange(index, "front", e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <div>
+                    <label htmlFor={`definition-input-${index}`}>
+                      Định nghĩa:
+                    </label>
+                    <div className="flex gap-6">
+                      <Input
+                        id={`definition-input-${index}`}
+                        value={card.definition}
+                        onChange={(e) =>
+                          handleCardChange(index, "definition", e.target.value)
+                        }
+                      />
+                      <Button>Gửi</Button>
+                    </div>
+                  </div>
+                  <div>
+                    <label htmlFor={`synonyms-input-${index}`}>
+                      Từ đồng nghĩa:
+                    </label>
+                    <div className="flex gap-6">
+                      <Input
+                        id={`synonyms-input-${index}`}
+                        value={card.synonyms}
+                        onChange={(e) =>
+                          handleCardChange(index, "synonyms", e.target.value)
+                        }
+                      />
+                      <Button>Gửi</Button>
+                    </div>
+                  </div>
+                  <div>
+                    <label htmlFor={`example-input-${index}`}>Ví dụ:</label>
+                    <div className="flex gap-6">
+                      <Input
+                        id={`example-input-${index}`}
+                        value={card.example}
+                        onChange={(e) =>
+                          handleCardChange(index, "example", e.target.value)
+                        }
+                      />
+                      <Button>Gửi</Button>
+                    </div>
+                  </div>
+                </div>
+                <Button onClick={() => handleRemoveCard(index)}>Xóa</Button>
+              </div>
             ))}
-          </Select> */}
+          </div>
+          <Button onClick={handleAddCard}>Thêm thẻ</Button>
+          <Button onClick={handleCreateDeck}>Tạo thẻ</Button>
         </div>
-        {/* <div className="my-4">
-          <label htmlFor="deck-name-input">Tên bộ thẻ:</label>
-          <Input
-            id="deck-name-input"
-            value={frontCard}
-            onChange={(e) => setFrontCard(e.target.value)}
-          />
-        </div> */}
-        <div className="my-4">
-          {cards.map((card, index) => (
-            <div key={index} className="flex gap-6">
-              <div className="flex-1">
-                <label htmlFor={`front-input-${index}`}>Mặt trước:</label>
-                <div className="flex gap-6">
-                  <Input
-                    id={`front-input-${index}`}
-                    value={card.front}
-                    onChange={(e) =>
-                      handleCardChange(index, "front", e.target.value)
-                    }
-                  />
-                </div>
-              </div>
-              <div className="flex-1">
-                <div>
-                  <label htmlFor={`definition-input-${index}`}>
-                    Định nghĩa:
-                  </label>
-                  <div className="flex gap-6">
-                    <Input
-                      id={`definition-input-${index}`}
-                      value={card.definition}
-                      onChange={(e) =>
-                        handleCardChange(index, "definition", e.target.value)
-                      }
-                    />
-                    <Button>Gửi</Button>
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor={`synonyms-input-${index}`}>
-                    Từ đồng nghĩa:
-                  </label>
-                  <div className="flex gap-6">
-                    <Input
-                      id={`synonyms-input-${index}`}
-                      value={card.synonyms}
-                      onChange={(e) =>
-                        handleCardChange(index, "synonyms", e.target.value)
-                      }
-                    />
-                    <Button>Gửi</Button>
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor={`example-input-${index}`}>Ví dụ:</label>
-                  <div className="flex gap-6">
-                    <Input
-                      id={`example-input-${index}`}
-                      value={card.example}
-                      onChange={(e) =>
-                        handleCardChange(index, "example", e.target.value)
-                      }
-                    />
-                    <Button>Gửi</Button>
-                  </div>
-                </div>
-              </div>
-              <Button onClick={() => handleRemoveCard(index)}>Xóa</Button>
-            </div>
-          ))}
-        </div>
-        <Button onClick={handleAddCard}>Thêm thẻ</Button>
-        <Button onClick={handleCreateDeck}>Tạo thẻ</Button>
       </div>
     </div>
   );
