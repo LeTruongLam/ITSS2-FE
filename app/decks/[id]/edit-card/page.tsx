@@ -5,7 +5,7 @@ import { RobotOutlined } from "@ant-design/icons";
 const CreateDeck = (props: any) => {
   const [cards, setCards] = useState({
     front: "",
-    back: { definition: "", synonyms: "", example: "" },
+    back: { definition: "", usage: "", example: "" },
   });
 
   const token =
@@ -15,11 +15,11 @@ const CreateDeck = (props: any) => {
   const handleCreateDeck = async () => {
     console.log("Input:", cards);
     const { front, back } = cards;
-    const { definition, synonyms, example } = back;
+    const { definition, usage, example } = back;
 
     const cardsData = {
       front,
-      back: `<p>${definition}</p><p>${synonyms}</p><p>${example}</p>`,
+      back: `<p>${definition}</p><p>${usage}</p><p>${example}</p>`,
     };
 
     try {
@@ -61,7 +61,7 @@ const CreateDeck = (props: any) => {
     }));
   };
 
-  const handleGenerateDefinition = async (index: any, front: string) => {
+  const handleGenerateDefinition = async (front: string) => {
     const value = { "word": front }
     console.log(value);
 
@@ -81,13 +81,19 @@ const CreateDeck = (props: any) => {
       }
       const data = await res.json();
       const result = data.res.split('\n')[1];
-      handleCardChange(index, "back.definition", result);
+      setCards((prevCards) => ({
+        ...prevCards,
+        back: {
+          ...prevCards.back,
+          definition: result,
+        },
+      }));
     } catch (error) {
       console.error("Lỗi khi lấy danh sách thư mục:", error);
     }
   };
 
-  const handleGenerateSynonym = async (index: any, front: string) => {
+  const handleGenerateUsage = async (front: string) => {
     const value = { "word": front }
     console.log(value);
 
@@ -106,14 +112,20 @@ const CreateDeck = (props: any) => {
         return;
       }
       const data = await res.json();
-      const result = data.res.split('\n')[1];
-      handleCardChange(index, "back.synonyms", result);
+      const result = data.res;
+      setCards((prevCards) => ({
+        ...prevCards,
+        back: {
+          ...prevCards.back,
+          usage: result,
+        },
+      }));
     } catch (error) {
       console.error("Lỗi khi lấy danh sách thư mục:", error);
     }
   };
 
-  const handleGenerateExample = async (index: any, front: string) => {
+  const handleGenerateExample = async (front: string) => {
     const value = { "word": front }
     console.log(value);
 
@@ -133,7 +145,13 @@ const CreateDeck = (props: any) => {
       }
       const data = await res.json();
       const result = data.res.split('\n')[1];
-      handleCardChange(index, "back.example", result);
+      setCards((prevCards) => ({
+        ...prevCards,
+        back: {
+          ...prevCards.back,
+          example: result,
+        },
+      }));
     } catch (error) {
       console.error("Lỗi khi lấy danh sách thư mục:", error);
     }
@@ -167,61 +185,40 @@ const CreateDeck = (props: any) => {
                   <label htmlFor="definition-input">Định nghĩa:</label>
                   <div className="flex gap-6">
                     <Input
-                      addonAfter={<RobotOutlined />}
+                      addonAfter={<RobotOutlined onClick={() => handleGenerateDefinition(cards.front)} />}
                       id="definition-input"
                       name="definition"
                       value={cards.back.definition}
                       onChange={handleBackInputChange}
                     />
-                    <Button
-                      className="bg-lime-700"
-                      type="primary"
-                      onClick={() => handleGenerateDefinition(index, card.front)}
-                    >
-                      Gửi
-                    </Button>
                   </div>
                 </div>
                 <div>
-                  <label htmlFor={`synonyms-input-${index}`}>
+                  <label htmlFor={`usage-input`}>
                     Cách dùng:
                   </label>
                   <div className="flex gap-6">
                     <Input
-                      addonAfter={<RobotOutlined />}
+                      addonAfter={<RobotOutlined onClick={() => handleGenerateUsage(cards.front)} />}
 
-                      id="synonyms-input"
-                      name="synonyms"
-                      value={cards.back.synonyms}
+                      id="usage-input"
+                      name="usage"
+                      value={cards.back.usage}
                       onChange={handleBackInputChange}
                     />
-                    <Button
-                      className="bg-lime-700"
-                      type="primary"
-                      onClick={() => handleGenerateSynonym(index, card.front)}
-                    >
-                      Gửi
-                    </Button>
                   </div>
                 </div>
                 <div>
                   <label htmlFor="example-input">Ví dụ:</label>
                   <div className="flex gap-6">
                     <Input
-                      addonAfter={<RobotOutlined />}
+                      addonAfter={<RobotOutlined onClick={() => handleGenerateExample(cards.front)} />}
 
                       id="example-input"
                       name="example"
                       value={cards.back.example}
                       onChange={handleBackInputChange}
                     />
-                    <Button
-                      className="bg-lime-700"
-                      type="primary"
-                      onClick={() => handleGenerateExample(index, card.front)}
-                    >
-                      Gửi
-                    </Button>
                   </div>
                 </div>
               </div>
