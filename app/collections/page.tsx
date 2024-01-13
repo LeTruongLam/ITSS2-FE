@@ -1,12 +1,12 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "antd";
 import CreateFolder from "./CreateFolder";
 
 const Collection = () => {
-
+  const router = useRouter();
   const [showCreateFolder, setShowCreateFolder] = useState(false);
   const [folders, setFolders] = useState([]);
 
@@ -25,19 +25,25 @@ const Collection = () => {
         },
       });
       if (res.status === 401) {
-        // Xử lý trường hợp không xác thực thành công
         console.log("Unauthorized");
         return;
+      }
+      if (res.status !== 200) {
+        throw new Error("Failed to fetch folders");
       }
       const data = await res.json();
       setFolders(data);
     } catch (error) {
-      console.error("Lỗi khi lấy danh sách thư mục:", error);
+      console.error("Error fetching folders:", error.message);
     }
   };
 
   const handleCreateFolder = () => {
     setShowCreateFolder(true);
+  };
+
+  const handleLinkClick = (folderId) => {
+    router.push(`/decks/${folderId}`, { state: folders });
   };
 
   return (
@@ -54,13 +60,13 @@ const Collection = () => {
       </div>
       <div className="mt-6 flex justify-between gap-8">
         {folders.map((folder) => (
-          <Link
+          <div
             key={folder.id}
-            href={`/decks/${folder.id}`}
+            onClick={() => handleLinkClick(folder.id)}
             className="w-4/12 h-56 shadow-md hover:shadow-xl rounded-2xl border border-slate-200"
           >
             <p className="m-4">{folder.name}</p>
-          </Link>
+          </div>
         ))}
       </div>
       {showCreateFolder && (
