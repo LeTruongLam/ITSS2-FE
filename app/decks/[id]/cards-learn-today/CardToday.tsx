@@ -89,8 +89,6 @@ const Card = ({ deck_id }) => {
         .split(",")
         .map((item) => item.trim());
       setTime(array);
-      // setTime(cardData[previousIndex].dues_predict);
-
       setCardId(cardData[previousIndex].id);
     }
   };
@@ -99,6 +97,9 @@ const Card = ({ deck_id }) => {
       setIsAnimating(true);
       setIsFlipped(false);
       setCurrentCardIndex((prevIndex) => {
+        if (currentCardIndex == cardData.length) {
+          fetchCardData();
+        }
         const nextIndex = prevIndex === cardData.length - 1 ? 0 : prevIndex + 1;
         setCardId(cardData[nextIndex].id);
 
@@ -106,14 +107,9 @@ const Card = ({ deck_id }) => {
           .split(",")
           .map((item) => item.trim());
         setTime(array);
-
-        // setTime(cardData[nextIndex].dues_predict);
-
-        console.log(cardData[nextIndex].id);
         return nextIndex;
       });
     }
-    fetchCardData();
   };
   const handleRating = async (id) => {
     try {
