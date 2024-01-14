@@ -2,12 +2,9 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./views.css";
-import {
-
-  RollbackOutlined,
-} from "@ant-design/icons";
+import { notFound } from "next/navigation";
+import { RollbackOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
-
 const Card = ({ deck_id }) => {
   const router = useRouter();
 
@@ -42,7 +39,7 @@ const Card = ({ deck_id }) => {
     const fetchCardData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/decks/${deck_id}/cards`,
+          `http://localhost:3001/decks/${deck_id}/cards_learn_today`,
           {
             method: "GET",
             headers: {
@@ -103,7 +100,7 @@ const Card = ({ deck_id }) => {
       });
     }
   };
-  const handleRating = async (id) => {
+  const handleRating = async (text) => {
     try {
       const response = await fetch(
         `http://localhost:3001/decks/${deck_id}/cards/${cardId}`,
@@ -113,7 +110,7 @@ const Card = ({ deck_id }) => {
             "Content-Type": "application/json",
             Authorization: `${token}`,
           },
-          body: JSON.stringify({ rating: id }),
+          body: JSON.stringify({ status: text }),
         }
       );
       const data = await response.json();
@@ -128,8 +125,11 @@ const Card = ({ deck_id }) => {
   }, [currentCardIndex]);
 
   return (
-    <div >
-       <div className="flexStart pt-1 ml-8 mr-8 " style={{ alignItems: "flex-start" }}>
+    <div className="">
+      <div
+        className="flexStart pt-1 ml-8 mr-8 "
+        style={{ alignItems: "flex-start" }}
+      >
         <div
           className="flexStart items-start gap-1 mt-6 text-black cursor-pointer"
           style={{ alignItems: "flex-start" }}
@@ -155,7 +155,7 @@ const Card = ({ deck_id }) => {
               setIsAnimating(false);
             }}
           >
-            {cardData.length > 0 && (
+            {cardData.length > 0 ? (
               <>
                 {isFlipped ? (
                   <div className="flip-card-back w-[100%] h-[100%] bg-white text-black p-4 shadow-md hover:shadow-xl rounded-2xl border border-slate-200">
@@ -192,6 +192,8 @@ const Card = ({ deck_id }) => {
                   </div>
                 )}
               </>
+            ) : (
+              notFound()
             )}
           </motion.div>
         </div>

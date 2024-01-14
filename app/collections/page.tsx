@@ -84,7 +84,7 @@ const Collection = () => {
   );
 
   return (
-    <div className="p-8 height-wrapper">
+    <div className="p-8 height-wrapper bg-slate-100">
       <div className="flex justify-between">
         <div className="text-2xl font-bold">
           <FolderOpenOutlined />
@@ -102,7 +102,7 @@ const Collection = () => {
       {folders.map((folder) => (
           <div
             key={folder.id}
-            className="w-[23%] h-56 shadow-md hover:shadow-xl rounded-2xl border border-slate-200"
+            className="w-[23%] h-56 shadow-md hover:shadow-xl rounded-2xl border bg-white border-slate-200"
           >
             <div className="flex flex-col m-4 justify-start h-full pb-8">
               <div className="flex justify-between align-middle">

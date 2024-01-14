@@ -61,13 +61,13 @@ const CreateFolder = ({ fetchData, setShowCreateFolder }) => {
                     className="text-base font-semibold leading-6 text-gray-900"
                     id="modal-title"
                   >
-                    Tạo thư mục mới
+                    Add new folder
                   </h3>
                   <div className="mt-2">
                     <div className="mt-2">
                       <Input
                         id="title"
-                        placeholder="Nhập tên thư mục"
+                        placeholder="Enter name folder"
                         name="name"
                         value={value.name}
                         onChange={handleInputChange}
@@ -86,13 +86,13 @@ const CreateFolder = ({ fetchData, setShowCreateFolder }) => {
                 onClick={handleCreateFolder}
                 className="nline-flex w-full justify-center rounded-md bg-lime-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
               >
-                Tạo thư mục
+                Add folder
               </button>
               <button
                 onClick={handleClose}
                 className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
               >
-                Hủy
+                Cancel
               </button>
             </div>
           </div>

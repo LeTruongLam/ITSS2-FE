@@ -33,7 +33,7 @@ const CreateDeck = (props: any) => {
       });
 
       if (res.ok) {
-        message.success("Tạo thành công");
+        message.success("Add success!  ");
       } else {
         // Xử lý khi tạo thẻ thất bại
         throw new Error("Lỗi khi tạo thẻ");
@@ -121,7 +121,7 @@ const CreateDeck = (props: any) => {
         },
       }));
     } catch (error) {
-      console.error("Lỗi khi lấy danh sách thư mục:", error);
+      console.error("Error getting directory list!!!");
     }
   };
 
@@ -139,12 +139,10 @@ const CreateDeck = (props: any) => {
         body: JSON.stringify(value),
       });
       if (res.status === 401) {
-        // Xử lý trường hợp không xác thực thành công
         console.log("Unauthorized");
         return;
       }
       const data = await res.json();
-      // const result = data.res.split('\n')[1];
       const result = data.res;
       setCards((prevCards) => ({
         ...prevCards,
@@ -154,7 +152,7 @@ const CreateDeck = (props: any) => {
         },
       }));
     } catch (error) {
-      console.error("Lỗi khi lấy danh sách thư mục:", error);
+      console.error("Error getting directory list!!!");
     }
   };
 
@@ -162,16 +160,15 @@ const CreateDeck = (props: any) => {
     <div className="p-8 height-wrapper">
       <div className="flex justify-between">
         <div className="text-2xl font-bold">
-          <span className="ml-2">Tạo bộ thẻ</span>
+          <span className="ml-2">Add card</span>
         </div>
       </div>
       <div>
         <div className="my-4">
-          <label htmlFor="folder-select">Chọn thư mục:</label>
           <div className="my-4">
             <div className="flex gap-6">
               <div className="flex-1">
-                <label htmlFor="front-input">Mặt trước:</label>
+                <label htmlFor="front-input">Front view :</label>
                 <div className="flex gap-6">
                   <Input
                     id="front-input"
@@ -183,7 +180,7 @@ const CreateDeck = (props: any) => {
               </div>
               <div className="flex-1">
                 <div>
-                  <label htmlFor="definition-input">Định nghĩa:</label>
+                  <label htmlFor="definition-input">Definition :</label>
                   <div className="flex gap-6">
                     <Input
                       addonAfter={<RobotOutlined onClick={() => handleGenerateDefinition(cards.front)} />}
@@ -196,7 +193,7 @@ const CreateDeck = (props: any) => {
                 </div>
                 <div>
                   <label htmlFor={`usage-input`}>
-                    Cách dùng:
+                  Usage :
                   </label>
                   <div className="flex gap-6">
                     <Input
@@ -210,7 +207,7 @@ const CreateDeck = (props: any) => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="example-input">Ví dụ:</label>
+                  <label htmlFor="example-input">Example :</label>
                   <div className="flex gap-6">
                     <Input
                       addonAfter={<RobotOutlined onClick={() => handleGenerateExample(cards.front)} />}
@@ -225,7 +222,7 @@ const CreateDeck = (props: any) => {
               </div>
             </div>
           </div>
-          <Button onClick={handleCreateDeck}>Tạo thẻ</Button>
+          <Button onClick={handleCreateDeck}>Submit</Button>
         </div>
       </div>
     </div>
