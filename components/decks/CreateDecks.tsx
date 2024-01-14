@@ -26,7 +26,7 @@ const CreateDeck = ({ setShowCreateDeck, id, fetchData }) => {
     const token = localStorage.getItem("token");
     console.log(token);
     try {
-      const res = await fetch("http://54.255.196.25:3001/decks", {
+      const res = await fetch("http://localhost:3001/decks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

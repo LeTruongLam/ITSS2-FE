@@ -23,7 +23,7 @@ const CreateFolder = ({ fetchData, setShowCreateFolder }) => {
   const handleCreateFolder = async () => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("http://54.255.196.25:3001/decks", {
+      const res = await fetch("http://localhost:3001/decks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

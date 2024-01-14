@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./views.css";
 import { notFound } from "next/navigation";
@@ -105,7 +105,7 @@ const Card = ({ deck_id }) => {
   const handleRating = async (text) => {
     try {
       const response = await fetch(
-        `http://54.255.196.25:3001/decks/${deck_id}/cards/${cardId}`,
+        `http://localhost:3001/decks/${deck_id}/cards/${cardId}`,
         {
           method: "PUT",
           headers: {

@@ -47,7 +47,7 @@ const EditFolder = ({
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(`http://54.255.196.25:3001/decks/${id}`, {
+      const res = await fetch(`http://localhost:3001/decks/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
