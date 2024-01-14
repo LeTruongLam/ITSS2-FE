@@ -20,19 +20,19 @@ const Card = ({ deck_id }) => {
   const [rating, setRating] = useState([
     {
       id: 0,
-      text: "again",
+      text: "Again",
     },
     {
       id: 1,
-      text: "hard",
+      text: "Hard",
     },
     {
       id: 2,
-      text: "good",
+      text: "Good",
     },
     {
       id: 3,
-      text: "easy",
+      text: "Easy",
     },
   ]);
   const fetchCardData = async () => {
@@ -100,7 +100,7 @@ const Card = ({ deck_id }) => {
       });
     }
   };
-  const handleRating = async (text) => {
+  const handleRating = async (id) => {
     try {
       const response = await fetch(
         `http://localhost:3001/decks/${deck_id}/cards/${cardId}`,
@@ -110,7 +110,7 @@ const Card = ({ deck_id }) => {
             "Content-Type": "application/json",
             Authorization: `${token}`,
           },
-          body: JSON.stringify({ rating: text }),
+          body: JSON.stringify({ rating: id }),
         }
       );
       const data = await response.json();
@@ -202,7 +202,7 @@ const Card = ({ deck_id }) => {
                 <button
                   className="px-4 py-2 mr-2 text-black bg-slate-100 rounded hover:bg-slate-200"
                   onClick={() => {
-                    handleRating(item.text);
+                    handleRating(item.id);
                     handleNext();
                   }}
                 >
