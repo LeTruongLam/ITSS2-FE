@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./views.css";
 import { notFound } from "next/navigation";
@@ -38,6 +38,8 @@ const Card = ({ deck_id }) => {
   useEffect(() => {
     const fetchCardData = async () => {
       try {
+        console.log("Test");
+        
         const response = await fetch(
           `http://54.255.196.25:3001/decks/${deck_id}/cards_learn_today`,
           {
