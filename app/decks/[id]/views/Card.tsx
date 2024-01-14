@@ -39,7 +39,7 @@ const Card = ({ deck_id }) => {
     const fetchCardData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:3001/decks/${deck_id}/cards`,
+          `http://54.255.196.25:3001/decks/${deck_id}/cards`,
           {
             method: "GET",
             headers: {
@@ -103,7 +103,7 @@ const Card = ({ deck_id }) => {
   const handleRating = async (id) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/decks/${deck_id}/cards/${cardId}`,
+        `http://54.255.196.25:3001/decks/${deck_id}/cards/${cardId}`,
         {
           method: "PUT",
           headers: {
