@@ -25,11 +25,6 @@ const TheDeck = (props: any) => {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const parent_id = props.params?.id;
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   const fetchData = async () => {
     try {
       const res = await fetch(`http://localhost:3001/decks`, {
@@ -45,12 +40,16 @@ const TheDeck = (props: any) => {
         return;
       }
       const data = await res.json();
-      selectDeck(data);
+      await selectDeck(data);
       console.log(data);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách thư mục:", error);
     }
   };
+  useEffect(() => {
+    console.log(decks);
+    fetchData();
+  }, []);
 
   const selectDeck = async (data: any) => {
     data.forEach((deck: any) => {
@@ -165,7 +164,7 @@ const TheDeck = (props: any) => {
                     className="underline text-red-600 flex gap-2"
                   >
                     <FireFilled />
-                    Cards to learn today
+                    Cards to learn today ({deck.number_of_cards_today})
                   </Link>
                 </div>
               </div>
@@ -181,6 +180,7 @@ const TheDeck = (props: any) => {
       )}
       {showEditDeck && (
         <EditDecks
+          fetchData={fetchData}
           setShowEditFolder={setShowEditDeck}
           name={editDeck.name}
           parent_id={editDeck.parent_id}

@@ -12,6 +12,7 @@ const Card = ({ deck_id }) => {
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const [cardData, setCardData] = useState([]);
+  const [time, setTime] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [cardId, setCardId] = useState();
@@ -38,7 +39,7 @@ const Card = ({ deck_id }) => {
   const fetchCardData = async () => {
     try {
       const response = await fetch(
-        `http://54.255.196.25:3001/decks/${deck_id}/cards_learn_today`,
+        `http://localhost:3001/decks/${deck_id}/cards_learn_today`,
         {
           method: "GET",
           headers: {
@@ -51,16 +52,16 @@ const Card = ({ deck_id }) => {
       console.log(data);
 
       await setCardId(data[0].id);
+      const array = data[0].dues_predict.split(",").map((item) => item.trim());
+      setTime(array);
       setCardData(data);
     } catch (error) {
       console.error("Error fetching card data:", error);
     }
   };
-
   useEffect(() => {
-   
     fetchCardData();
-  }, [deck_id, token]);
+  }, []);
 
   const handleFlip = () => {
     if (!isAnimating) {
@@ -84,7 +85,11 @@ const Card = ({ deck_id }) => {
 
       const previousIndex =
         currentCardIndex === 0 ? cardData.length - 1 : currentCardIndex - 1;
-      console.log(cardData[previousIndex].id);
+      const array = cardData[previousIndex].dues_predict
+        .split(",")
+        .map((item) => item.trim());
+      setTime(array);
+      // setTime(cardData[previousIndex].dues_predict);
 
       setCardId(cardData[previousIndex].id);
     }
@@ -96,13 +101,21 @@ const Card = ({ deck_id }) => {
       setCurrentCardIndex((prevIndex) => {
         const nextIndex = prevIndex === cardData.length - 1 ? 0 : prevIndex + 1;
         setCardId(cardData[nextIndex].id);
+
+        const array = cardData[nextIndex].dues_predict
+          .split(",")
+          .map((item) => item.trim());
+        setTime(array);
+
+        // setTime(cardData[nextIndex].dues_predict);
+
         console.log(cardData[nextIndex].id);
         return nextIndex;
       });
     }
     fetchCardData();
   };
-  const handleRating = async (text) => {
+  const handleRating = async (id) => {
     try {
       const response = await fetch(
         `http://localhost:3001/decks/${deck_id}/cards/${cardId}`,
@@ -112,7 +125,7 @@ const Card = ({ deck_id }) => {
             "Content-Type": "application/json",
             Authorization: `${token}`,
           },
-          body: JSON.stringify({ status: text }),
+          body: JSON.stringify({ rating: id }),
         }
       );
       const data = await response.json();
@@ -157,7 +170,7 @@ const Card = ({ deck_id }) => {
               setIsAnimating(false);
             }}
           >
-            {cardData.length > 0 ? (
+            {cardData.length > 0 && (
               <>
                 {isFlipped ? (
                   <div className="flip-card-back w-[100%] h-[100%] bg-white text-black p-4 shadow-md hover:shadow-xl rounded-2xl border border-slate-200">
@@ -194,14 +207,12 @@ const Card = ({ deck_id }) => {
                   </div>
                 )}
               </>
-            ) : (
-              notFound()
             )}
           </motion.div>
         </div>
         <div className="m-6 flex flexCenter bg-white justify-center w-[800px] rounded-md">
           <div className="p-6 flex justify-center gap-3 w-full">
-            {rating.map((item) => (
+            {rating.map((item, index) => (
               <div key={item.id}>
                 <button
                   className="px-4 py-2 mr-2 text-black bg-slate-100 rounded hover:bg-slate-200"
@@ -210,7 +221,7 @@ const Card = ({ deck_id }) => {
                     handleNext();
                   }}
                 >
-                  {item.text}
+                  {item.text}({time[index]})
                 </button>
               </div>
             ))}
