@@ -1,8 +1,17 @@
 "use client";
 import React, { useState } from "react";
 import { Input, Button, message } from "antd";
-import { RobotOutlined } from "@ant-design/icons";
+import {
+  FolderOpenOutlined,
+  FireFilled,
+  RobotOutlined,
+  RollbackOutlined,
+} from "@ant-design/icons";
+import { useRouter } from "next/navigation";
+
 const CreateDeck = (props: any) => {
+  const router = useRouter();
+
   const [cards, setCards] = useState({
     front: "",
     back: { definition: "", usage: "", example: "" },
@@ -23,14 +32,17 @@ const CreateDeck = (props: any) => {
     };
 
     try {
-      const res = await fetch(`http://54.255.196.25:3001/decks/${deck_id}/cards`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token}`,
-        },
-        body: JSON.stringify(cardsData),
-      });
+      const res = await fetch(
+        `http://54.255.196.25:3001/decks/${deck_id}/cards`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+          body: JSON.stringify(cardsData),
+        }
+      );
 
       if (res.ok) {
         message.success("Add success!  ");
@@ -62,7 +74,7 @@ const CreateDeck = (props: any) => {
   };
 
   const handleGenerateDefinition = async (front: string) => {
-    const value = { "word": front }
+    const value = { word: front };
     console.log(value);
 
     try {
@@ -80,7 +92,7 @@ const CreateDeck = (props: any) => {
         return;
       }
       const data = await res.json();
-      const result = data.res.split('\n')[1];
+      const result = data.res.split("\n")[1];
       setCards((prevCards) => ({
         ...prevCards,
         back: {
@@ -94,7 +106,7 @@ const CreateDeck = (props: any) => {
   };
 
   const handleGenerateUsage = async (front: string) => {
-    const value = { "word": front }
+    const value = { word: front };
     console.log(value);
 
     try {
@@ -126,7 +138,7 @@ const CreateDeck = (props: any) => {
   };
 
   const handleGenerateExample = async (front: string) => {
-    const value = { "word": front }
+    const value = { word: front };
     console.log(value);
 
     try {
@@ -158,6 +170,18 @@ const CreateDeck = (props: any) => {
 
   return (
     <div className="p-8 height-wrapper">
+      <div className="flexStart pt-1 " style={{ alignItems: "flex-start" }}>
+        <div
+          className="flexStart items-start gap-1 text-black cursor-pointer"
+          style={{ alignItems: "flex-start" }}
+          onClick={() => {
+            router.back();
+          }}
+        >
+          <RollbackOutlined className="mb-4 text-2xl" />
+          <span>Back</span>
+        </div>
+      </div>
       <div className="flex justify-between">
         <div className="text-2xl font-bold">
           <span className="ml-2">Add card</span>
@@ -183,7 +207,11 @@ const CreateDeck = (props: any) => {
                   <label htmlFor="definition-input">Definition :</label>
                   <div className="flex gap-6">
                     <Input
-                      addonAfter={<RobotOutlined onClick={() => handleGenerateDefinition(cards.front)} />}
+                      addonAfter={
+                        <RobotOutlined
+                          onClick={() => handleGenerateDefinition(cards.front)}
+                        />
+                      }
                       id="definition-input"
                       name="definition"
                       value={cards.back.definition}
@@ -192,13 +220,14 @@ const CreateDeck = (props: any) => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor={`usage-input`}>
-                  Usage :
-                  </label>
+                  <label htmlFor={`usage-input`}>Usage :</label>
                   <div className="flex gap-6">
                     <Input
-                      addonAfter={<RobotOutlined onClick={() => handleGenerateUsage(cards.front)} />}
-
+                      addonAfter={
+                        <RobotOutlined
+                          onClick={() => handleGenerateUsage(cards.front)}
+                        />
+                      }
                       id="usage-input"
                       name="usage"
                       value={cards.back.usage}
@@ -210,8 +239,11 @@ const CreateDeck = (props: any) => {
                   <label htmlFor="example-input">Example :</label>
                   <div className="flex gap-6">
                     <Input
-                      addonAfter={<RobotOutlined onClick={() => handleGenerateExample(cards.front)} />}
-
+                      addonAfter={
+                        <RobotOutlined
+                          onClick={() => handleGenerateExample(cards.front)}
+                        />
+                      }
                       id="example-input"
                       name="example"
                       value={cards.back.example}

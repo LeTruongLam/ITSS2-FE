@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import "./views.css";
 import { RollbackOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 
 const Card = ({ deck_id }) => {
   const router = useRouter();
@@ -155,7 +156,7 @@ const Card = ({ deck_id }) => {
               setIsAnimating(false);
             }}
           >
-            {cardData.length > 0 && (
+            {cardData.length > 0 ? (
               <>
                 {isFlipped ? (
                   <div className="flip-card-back w-[100%] h-[100%] bg-white text-black p-4 shadow-md hover:shadow-xl rounded-2xl border border-slate-200">
@@ -188,11 +189,12 @@ const Card = ({ deck_id }) => {
                   <div className="flip-card-front w-[100%] h-[100%] bg-white text-black shadow-md hover:shadow-xl rounded-2xl border border-slate-200 p-4">
                     <h1 className="flex  text-3xl w-[100%] h-[100%] flexCenter">
                       {cardData[currentCardIndex]?.front}
-                      
                     </h1>
                   </div>
                 )}
               </>
+            ) : (
+              notFound()
             )}
           </motion.div>
         </div>

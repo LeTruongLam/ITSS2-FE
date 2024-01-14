@@ -35,29 +35,30 @@ const Card = ({ deck_id }) => {
     },
     // Add more objects as needed
   ]);
+  const fetchCardData = async () => {
+    try {
+      const response = await fetch(
+        `http://54.255.196.25:3001/decks/${deck_id}/cards_learn_today`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+
+      await setCardId(data[0].id);
+      setCardData(data);
+    } catch (error) {
+      console.error("Error fetching card data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchCardData = async () => {
-      try {
-        const response = await fetch(
-          `http://54.255.196.25:3001/decks/${deck_id}/cards_learn_today`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-
-        await setCardId(data[0].id);
-        setCardData(data);
-      } catch (error) {
-        console.error("Error fetching card data:", error);
-      }
-    };
-
+   
     fetchCardData();
   }, [deck_id, token]);
 
@@ -99,6 +100,7 @@ const Card = ({ deck_id }) => {
         return nextIndex;
       });
     }
+    fetchCardData();
   };
   const handleRating = async (text) => {
     try {
