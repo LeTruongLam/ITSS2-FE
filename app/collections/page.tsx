@@ -17,7 +17,7 @@ const Collection = () => {
 
   const fetchData = async () => {
     try {
-      const res = await fetch("http://localhost:3001/decks", {
+      const res = await fetch("http://54.255.196.25:3001/decks", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ const Collection = () => {
       e.preventDefault();
     }
     try {
-      const response = await fetch(`http://localhost:3001/decks/${id}`, {
+      const response = await fetch(`http://54.255.196.25:3001/decks/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
