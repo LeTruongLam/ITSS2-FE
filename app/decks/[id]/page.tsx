@@ -16,6 +16,7 @@ const TheDeck = (props: any) => {
   const [editDeck, setEditDeck] = useState({});
   // const [deck, setDeck] = useState([]);
   const [decks, setDecks] = useState([]);
+  const [parent, setParent] = useState({});
 
   // const token = localStorage.getItem("token");
   const token =
@@ -42,6 +43,7 @@ const TheDeck = (props: any) => {
       }
       const data = await res.json();
       selectDeck(data);
+      console.log(data)
     } catch (error) {
       console.error("Lỗi khi lấy danh sách thư mục:", error);
     }
@@ -102,7 +104,7 @@ const TheDeck = (props: any) => {
           type="primary"
           onClick={handleCreateDeck}
         >
-          Tạo bộ thẻ
+          Add deck
         </Button>
       </div>
       <div className="mt-6 flex gap-8 flex-wrap">
@@ -116,10 +118,8 @@ const TheDeck = (props: any) => {
               <div className="flex flex-col m-4 justify-between h-full pb-8">
                 <div>
                   <p className="text-ml mb-4 font-bold">{deck.name}</p>
-                  {/* <p className="mb-3">Mô tả</p> */}
                 </div>
                 <div className="flex justify-between">
-                  <span className="">Ngày cập nhật bộ thẻ</span>
                   <div>
                     <EditOutlined
                       style={{ fontSize: "24px" }}

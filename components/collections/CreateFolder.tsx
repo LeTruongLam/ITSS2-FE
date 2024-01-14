@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Input, message } from "antd";
 
-const CreateFolder = ({ setShowCreateFolder }) => {
+const CreateFolder = ({ fetchData, setShowCreateFolder }) => {
   const [value, setValue] = useState({
     name: "",
     parent_id: "",
@@ -21,10 +21,7 @@ const CreateFolder = ({ setShowCreateFolder }) => {
   };
 
   const handleCreateFolder = async () => {
-    // Xử lý logic tạo thư mục ở đây
     const token = localStorage.getItem("token");
-    console.log(token);
-
     try {
       const res = await fetch("http://localhost:3001/decks", {
         method: "POST",
@@ -37,13 +34,12 @@ const CreateFolder = ({ setShowCreateFolder }) => {
 
       if (res.ok) {
         setShowCreateFolder(false);
+        fetchData();
         message.success("Tạo thư mục thành công");
       } else {
-        // Xử lý khi tạo thư mục thất bại
         throw new Error("Lỗi khi tạo thư mục");
       }
     } catch (error: any) {
-      // Xử lý khi có lỗi xảy ra
       message.error(error.message);
     }
   };

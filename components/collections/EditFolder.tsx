@@ -2,7 +2,18 @@
 import React, { useState } from "react";
 import { Input, message } from "antd";
 
-const EditFolder = ({ setShowEditFolder, name, parent_id, id }: { setShowEditFolder: any; name: string; parent_id: number, id: number }) => {
+const EditFolder = ({
+  fetchData,
+  setShowEditFolder,
+  name,
+  parent_id,
+  id,
+}: {
+  setShowEditFolder: any;
+  name: string;
+  parent_id: number;
+  id: number;
+}) => {
   const [value, setValue] = useState({
     name: name,
     parent_id: parent_id,
@@ -34,7 +45,6 @@ const EditFolder = ({ setShowEditFolder, name, parent_id, id }: { setShowEditFol
   const handleEditFolder = async () => {
     // Xử lý logic tạo thư mục ở đây
     const token = localStorage.getItem("token");
-    console.log(token);
 
     try {
       const res = await fetch(`http://localhost:3001/decks/${id}`, {
@@ -48,6 +58,7 @@ const EditFolder = ({ setShowEditFolder, name, parent_id, id }: { setShowEditFol
 
       if (res.ok) {
         setShowEditFolder(false);
+        fetchData();
         message.success("Sửa thư mục thành công");
       } else {
         // Xử lý khi tạo thư mục thất bại

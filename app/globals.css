@@ -17,9 +17,12 @@
 }
 
 .flip-card-back {
-  transform: rotateY(180deg);
+  transform: rotateX(180deg);
 }
+.flip-card-next {
+  transform: rotateY(180deg);
 
+}
 .height-wrapper {
   min-height: calc(100vh - 72px);
 }

@@ -11,10 +11,11 @@
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@azure/openai": "^1.0.0-beta.10",
-    "@headlessui/react": "^1.7.18",
+    "@headlessui/react": "^2.0.0-alpha.4",
     "@types/jsonwebtoken": "^9.0.5",
     "antd": "^5.12.8",
     "cloudinary": "^1.41.2",
+    "clsx": "^2.1.0",
     "framer-motion": "^10.18.0",
     "graphql-request": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
