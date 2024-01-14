@@ -34,33 +34,32 @@ const Card = ({ deck_id }) => {
       id: 3,
       text: "Easy",
     },
-    // Add more objects as needed
   ]);
+  const fetchCardData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3001/decks/${deck_id}/cards`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `${token}`,
+          },
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+
+      await setCardId(data[0].id);
+      setCardData(data);
+    } catch (error) {
+      console.error("Error fetching card data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchCardData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3001/decks/${deck_id}/cards`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `${token}`,
-            },
-          }
-        );
-        const data = await response.json();
-        console.log(data);
-
-        await setCardId(data[0].id);
-        setCardData(data);
-      } catch (error) {
-        console.error("Error fetching card data:", error);
-      }
-    };
-
     fetchCardData();
-  }, [deck_id, token]);
+  }, [deck_id]);
 
   const handleFlip = () => {
     if (!isAnimating) {
@@ -156,7 +155,7 @@ const Card = ({ deck_id }) => {
               setIsAnimating(false);
             }}
           >
-            {cardData.length > 0 ? (
+            {cardData.length > 0 && (
               <>
                 {isFlipped ? (
                   <div className="flip-card-back w-[100%] h-[100%] bg-white text-black p-4 shadow-md hover:shadow-xl rounded-2xl border border-slate-200">
@@ -193,9 +192,7 @@ const Card = ({ deck_id }) => {
                   </div>
                 )}
               </>
-            ) : (
-              notFound()
-            )}
+            ) }
           </motion.div>
         </div>
         <div className="m-6 flex flexCenter bg-white justify-center w-[800px] rounded-md">

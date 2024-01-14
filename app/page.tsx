@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import "./home.css";
 import Image from "next/image";
@@ -7,8 +7,6 @@ import Icon1 from "../assets/icons/ui-ux.svg";
 import Icon2 from "../assets/icons/dev.svg";
 import Icon3 from "../assets/icons/mkt.svg";
 import Icon4 from "../assets/icons/watch.svg";
-// import LogoGmail from "../public/logo-gmail.svg";
-// import LogoGitHub from "../public/logo-github.svg";
 const Home = () => {
   return (
     <section className="flex-start flex-col paddings mb-16">
@@ -16,7 +14,11 @@ const Home = () => {
         <div className="content">
           <div className="body">
             <div className="hero-media">
-              <Image src={Image1} className="img" alt="Learn without limits and spread knowledge." />
+              <Image
+                src={Image1}
+                className="img"
+                alt="Learn without limits and spread knowledge."
+              />
               <div className="hero-summary">
                 <div className="item">
                   <div className="icon">
@@ -48,13 +50,18 @@ const Home = () => {
               </div>
             </div>
             <div className="hero-content">
-              <h1 className="heading">Learn without limits and spread knowledge.</h1>
+              <h1 className="heading">
+                Learn without limits and spread knowledge.
+              </h1>
               <p className="desc">
-                Build new skills for that “this is my year” feeling with courses, certificates, and
-                degrees from world-class universities and companies.
+                Build new skills for that “this is my year” feeling with
+                courses, certificates, and degrees from world-class universities
+                and companies.
               </p>
               <div className="hero-cta-group">
-                <a href="#!" className="btn hero-cta-btn">See Courses</a>
+                <a href="#!" className="btn hero-cta-btn">
+                  See Courses
+                </a>
                 <div className="hero-watch">
                   <div className="icon">
                     <a href="#!" className="">
@@ -67,7 +74,9 @@ const Home = () => {
                 </div>
               </div>
               <p className="desc">Recent engagement</p>
-              <p className="desc stats"><strong>50K</strong>"Students" <strong>70+</strong>"Courses"</p>
+              <p className="desc stats">
+                <strong>50K</strong>"Students" <strong>70+</strong>"Courses"
+              </p>
             </div>
           </div>
         </div>
