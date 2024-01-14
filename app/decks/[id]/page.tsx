@@ -1,27 +1,24 @@
 "use client";
 import {
   FolderOpenOutlined,
-  FireFilled,
-  MoreOutlined,
-  RollbackOutlined,
+  DeleteOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Button, message, Dropdown, Menu } from "antd";
-import { useRouter } from "next/navigation";
-
+import { Button, message } from "antd";
 import CreateDeck from "../../../components/decks/CreateDecks";
 import EditDecks from "../../../components/collections/EditFolder";
 
 const TheDeck = (props: any) => {
-  const router = useRouter();
-
   const [showCreateDeck, setShowCreateDeck] = useState(false);
   const [showEditDeck, setShowEditDeck] = useState(false);
   const [editDeck, setEditDeck] = useState({});
+  // const [deck, setDeck] = useState([]);
   const [decks, setDecks] = useState([]);
   const [parent, setParent] = useState({});
 
+  // const token = localStorage.getItem("token");
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
   const parent_id = props.params?.id;
@@ -32,7 +29,7 @@ const TheDeck = (props: any) => {
 
   const fetchData = async () => {
     try {
-      const res = await fetch(`http://54.255.196.25:3001/decks`, {
+      const res = await fetch(`http://localhost:3001/decks`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -46,7 +43,7 @@ const TheDeck = (props: any) => {
       }
       const data = await res.json();
       selectDeck(data);
-      console.log(data);
+      console.log(data)
     } catch (error) {
       console.error("Lỗi khi lấy danh sách thư mục:", error);
     }
@@ -66,20 +63,16 @@ const TheDeck = (props: any) => {
   };
 
   const handleEditDeck = (e: any, deck: any) => {
-    if (e && e.preventDefault) {
-      e.preventDefault();
-    }
+    e.preventDefault();
     setEditDeck(deck);
     setShowEditDeck(true);
     fetchData();
   };
 
   const handleDelete = async (e: any, id: number) => {
-    if (e && e.preventDefault) {
-      e.preventDefault();
-    }
+    e.preventDefault();
     try {
-      const response = await fetch(`http://54.255.196.25:3001/decks/${id}`, {
+      const response = await fetch(`http://localhost:3001/decks/${id}`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -97,39 +90,15 @@ const TheDeck = (props: any) => {
       message.error(error.message);
     }
   };
-  const menu = (deck) => (
-    <Menu>
-      <Menu.Item key="add">
-        <Link href={`/decks/${deck.id}/edit-card`}>Add card</Link>
-      </Menu.Item>
-      <Menu.Item key="edit" onClick={(e) => handleEditDeck(e, deck)}>
-        Edit deck
-      </Menu.Item>
-      <Menu.Item key="delete" onClick={(e) => handleDelete(e, deck.id)}>
-        Delete deck
-      </Menu.Item>
-    </Menu>
-  );
+
   return (
-    <div className="p-8 pt-4 height-wrapper bg-slate-100">
-      <div className="flexStart pt-1 " style={{ alignItems: "flex-start" }}>
-        <div
-          className="flexStart items-start gap-1 text-black cursor-pointer"
-          style={{ alignItems: "flex-start" }}
-          onClick={() => {
-            router.back();
-          }}
-        >
-          <RollbackOutlined className="mb-4 text-2xl" />
-          <span>Back</span>
-        </div>
-      </div>
+    <div className="p-8 height-wrapper">
       <div className="flex justify-between">
         <div className="text-2xl font-bold">
           <FolderOpenOutlined />
           <span className="ml-2">Tên thư mục</span>
         </div>
-
+      
         <Button
           className="bg-lime-700"
           type="primary"
@@ -141,35 +110,33 @@ const TheDeck = (props: any) => {
       <div className="mt-6 flex gap-8 flex-wrap">
         {decks.children &&
           decks.children.map((deck: any) => (
-            <div
+            <Link
               key={deck.id}
-              className="w-[23%] h-56 shadow-md hover:shadow-xl rounded-2xl border bg-white border-slate-200"
+              href={`/decks/${deck.id}/views`}
+              className="w-[23%] h-56 shadow-md hover:shadow-xl rounded-2xl border border-slate-200"
             >
-              <div className="flex flex-col m-4 justify-between h-full pb-8 ">
-                <div className="flex justify-between align-middle">
+              <div className="flex flex-col m-4 justify-between h-full pb-8">
+                <div>
                   <p className="text-ml mb-4 font-bold">{deck.name}</p>
-                  <Dropdown overlay={menu(deck)} trigger={["click"]}>
-                    <MoreOutlined className="bg-slate-300  h-6 pl-1 pr-1 rounded-full font-bold " />
-                  </Dropdown>
                 </div>
-                <div className="flexCenter">
-                  <Link href={`/decks/${deck.id}/views`}>
-                    <p className="px-4 py-2 mr-2 text-black bg-slate-100 rounded hover:bg-slate-200">
-                      Open
-                    </p>
-                  </Link>
-                </div>
-                <div className="flex justify-between align-middle ">
-                  <Link
-                    href={`/decks/${deck.id}/cards-learn-today`}
-                    className="underline text-red-600 flex gap-2"
-                  >
-                    <FireFilled />
-                    Cards to learn today
-                  </Link>
+                <div className="flex justify-between">
+                  <div>
+                    <EditOutlined
+                      style={{ fontSize: "24px" }}
+                      onClick={(e) => {
+                        handleEditDeck(e, deck);
+                      }}
+                    />
+                    <DeleteOutlined
+                      className="ml-4 text-2xl"
+                      onClick={(e) => {
+                        handleDelete(e, deck.id);
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
       </div>
       {showCreateDeck && (

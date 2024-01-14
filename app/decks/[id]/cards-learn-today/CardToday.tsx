@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./views.css";
 import { notFound } from "next/navigation";
@@ -38,10 +38,8 @@ const Card = ({ deck_id }) => {
   useEffect(() => {
     const fetchCardData = async () => {
       try {
-        console.log("Test");
-        
         const response = await fetch(
-          `http://54.255.196.25:3001/decks/${deck_id}/cards_learn_today`,
+          `http://localhost:3001/decks/${deck_id}/cards_learn_today`,
           {
             method: "GET",
             headers: {
@@ -105,7 +103,7 @@ const Card = ({ deck_id }) => {
   const handleRating = async (text) => {
     try {
       const response = await fetch(
-        `http://54.255.196.25:3001/decks/${deck_id}/cards/${cardId}`,
+        `http://localhost:3001/decks/${deck_id}/cards/${cardId}`,
         {
           method: "PUT",
           headers: {

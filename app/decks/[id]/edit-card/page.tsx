@@ -23,7 +23,7 @@ const CreateDeck = (props: any) => {
     };
 
     try {
-      const res = await fetch(`http://54.255.196.25:3001/decks/${deck_id}/cards`, {
+      const res = await fetch(`http://localhost:3001/decks/${deck_id}/cards`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
