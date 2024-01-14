@@ -11,6 +11,7 @@ const Card = ({ deck_id }) => {
 
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const [time, setTime] = useState([]);
 
   const [cardData, setCardData] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
@@ -51,6 +52,8 @@ const Card = ({ deck_id }) => {
       console.log(data);
 
       await setCardId(data[0].id);
+      const array = data[0].dues_predict.split(",").map((item) => item.trim());
+      setTime(array);
       setCardData(data);
     } catch (error) {
       console.error("Error fetching card data:", error);
@@ -83,7 +86,10 @@ const Card = ({ deck_id }) => {
 
       const previousIndex =
         currentCardIndex === 0 ? cardData.length - 1 : currentCardIndex - 1;
-      console.log(cardData[previousIndex].id);
+      const array = cardData[previousIndex].dues_predict
+        .split(",")
+        .map((item) => item.trim());
+      setTime(array);
 
       setCardId(cardData[previousIndex].id);
     }
@@ -95,7 +101,10 @@ const Card = ({ deck_id }) => {
       setCurrentCardIndex((prevIndex) => {
         const nextIndex = prevIndex === cardData.length - 1 ? 0 : prevIndex + 1;
         setCardId(cardData[nextIndex].id);
-        console.log(cardData[nextIndex].id);
+        const array = cardData[nextIndex].dues_predict
+          .split(",")
+          .map((item) => item.trim());
+        setTime(array);
         return nextIndex;
       });
     }
@@ -192,12 +201,12 @@ const Card = ({ deck_id }) => {
                   </div>
                 )}
               </>
-            ) }
+            )}
           </motion.div>
         </div>
-        <div className="m-6 flex flexCenter bg-white justify-center w-[800px] rounded-md">
+        {/* <div className="m-6 flex flexCenter bg-white justify-center w-[800px] rounded-md">
           <div className="p-6 flex justify-center gap-3 w-full">
-            {rating.map((item) => (
+            {rating.map((item,index) => (
               <div key={item.id}>
                 <button
                   className="px-4 py-2 mr-2 text-black bg-slate-100 rounded hover:bg-slate-200"
@@ -206,12 +215,12 @@ const Card = ({ deck_id }) => {
                     handleNext();
                   }}
                 >
-                  {item.text}
+                  {item.text}({time[index]})
                 </button>
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex justify-center mt-4 mb-4">

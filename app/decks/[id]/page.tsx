@@ -126,7 +126,6 @@ const TheDeck = (props: any) => {
       <div className="flex justify-between">
         <div className="text-2xl font-bold">
           <FolderOpenOutlined />
-          <span className="ml-2">Tên thư mục</span>
         </div>
 
         <Button
