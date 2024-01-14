@@ -43,6 +43,12 @@ const CreateDeck = (props: any) => {
 
       if (res.ok) {
         message.success("Add success!  ");
+
+        // Set lại giá trị cards về rỗng
+        setCards({
+          front: "",
+          back: { definition: "", usage: "", example: "" },
+        });
       } else {
         // Xử lý khi tạo thẻ thất bại
         throw new Error("Lỗi khi tạo thẻ");
