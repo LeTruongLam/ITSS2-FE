@@ -2,10 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./views.css";
-import {
-
-  RollbackOutlined,
-} from "@ant-design/icons";
+import { RollbackOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 
 const Card = ({ deck_id }) => {
@@ -128,8 +125,11 @@ const Card = ({ deck_id }) => {
   }, [currentCardIndex]);
 
   return (
-    <div >
-       <div className="flexStart pt-1 ml-8 mr-8 " style={{ alignItems: "flex-start" }}>
+    <div>
+      <div
+        className="flexStart pt-1 ml-8 mr-8 "
+        style={{ alignItems: "flex-start" }}
+      >
         <div
           className="flexStart items-start gap-1 mt-6 text-black cursor-pointer"
           style={{ alignItems: "flex-start" }}
@@ -188,6 +188,7 @@ const Card = ({ deck_id }) => {
                   <div className="flip-card-front w-[100%] h-[100%] bg-white text-black shadow-md hover:shadow-xl rounded-2xl border border-slate-200 p-4">
                     <h1 className="flex  text-3xl w-[100%] h-[100%] flexCenter">
                       {cardData[currentCardIndex]?.front}
+                      
                     </h1>
                   </div>
                 )}
