@@ -32,7 +32,7 @@ const ViewCards = () => {
   const [cardData, setCardData] = useState<Card[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [cardId, setCardId] = useState<string | undefined>();
+  const [cardId, setCardId] = useState<number | undefined>();
   const [isAnimating, setIsAnimating] = useState(false);
 
   const rating = [
@@ -160,8 +160,7 @@ const ViewCards = () => {
 
       const data = await response.json();
       console.log(data);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
