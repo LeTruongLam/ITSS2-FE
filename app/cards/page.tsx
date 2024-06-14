@@ -2,17 +2,29 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import "./views.css";
-import { notFound } from "next/navigation";
-import { RollbackOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
-const Card = ({ deck_id }) => {
+import axios from "axios";
+import useSWR from "swr";
+const fetcher = (url) => axios.get(url).then((res) => res.data);
+
+const ViewCards = () => {
   const router = useRouter();
+  const { data: cards } = useSWR(
+    "http://localhost:8800/api/v1/cards/learn-today",
+    fetcher,
+    { refreshInterval: 100 }
+  );
+
+  // const { data: currentDateData } = useSWR(
+  //   "http://localhost:8800/api/v1/cards/card-learn",
+  //   fetcher,
+  //   { refreshInterval: 100 }
+  // );
 
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const [cardData, setCardData] = useState([]);
-  const [time, setTime] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [cardId, setCardId] = useState();
@@ -21,47 +33,65 @@ const Card = ({ deck_id }) => {
     {
       id: 0,
       text: "Again",
+      label: "1m",
     },
     {
       id: 1,
       text: "Hard",
+      label: "10m",
     },
     {
       id: 2,
       text: "Good",
+      label: "1h",
     },
     {
       id: 3,
       text: "Easy",
+      label: "1d",
     },
-    // Add more objects as needed
+    {
+      id: 4,
+      text: "Very Easy",
+      label: "2d",
+    },
   ]);
-  const fetchCardData = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3001/decks/${deck_id}/cards_learn_today`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `${token}`,
-          },
-        }
-      );
-      const data = await response.json();
-      console.log(data);
 
-      await setCardId(data[0].id);
-      const array = data[0].dues_predict.split(",").map((item) => item.trim());
-      setTime(array);
-      setCardData(data);
-    } catch (error) {
-      console.error("Error fetching card data:", error);
+  const calculateNextTime = (text) => {
+    const now = new Date();
+    let nextTime;
+
+    switch (text) {
+      case "Again":
+        nextTime = new Date(now.getTime() + 1 * 60000); // 1 phút
+        break;
+      case "Hard":
+        nextTime = new Date(now.getTime() + 10 * 60000); // 10 phút
+        break;
+      case "Good":
+        nextTime = new Date(now.getTime() + 60 * 60000); // 1 giờ
+        break;
+      case "Easy":
+        nextTime = new Date(now.getTime() + 24 * 60 * 60000); // 1 ngày
+        break;
+        case "Very Easy":
+        nextTime = new Date(now.getTime() + 2*24 * 60 * 60000); // 2 ngày
+        break;
+      default:
+        nextTime = now;
+        break;
     }
+
+    // Chuyển đổi ngày giờ sang định dạng 'YYYY-MM-DD HH:MM:SS'
+    const year = nextTime.getFullYear();
+    const month = String(nextTime.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+    const day = String(nextTime.getDate()).padStart(2, "0");
+    const hours = String(nextTime.getHours()).padStart(2, "0");
+    const minutes = String(nextTime.getMinutes()).padStart(2, "0");
+    const seconds = String(nextTime.getSeconds()).padStart(2, "0");
+
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
-  useEffect(() => {
-    fetchCardData();
-  }, []);
 
   const handleFlip = () => {
     if (!isAnimating) {
@@ -85,10 +115,6 @@ const Card = ({ deck_id }) => {
 
       const previousIndex =
         currentCardIndex === 0 ? cardData.length - 1 : currentCardIndex - 1;
-      const array = cardData[previousIndex].dues_predict
-        .split(",")
-        .map((item) => item.trim());
-      setTime(array);
       setCardId(cardData[previousIndex].id);
     }
   };
@@ -97,62 +123,89 @@ const Card = ({ deck_id }) => {
       setIsAnimating(true);
       setIsFlipped(false);
       setCurrentCardIndex((prevIndex) => {
-        if (currentCardIndex == cardData.length) {
-          fetchCardData();
-        }
         const nextIndex = prevIndex === cardData.length - 1 ? 0 : prevIndex + 1;
         setCardId(cardData[nextIndex].id);
-
-        const array = cardData[nextIndex].dues_predict
-          .split(",")
-          .map((item) => item.trim());
-        setTime(array);
         return nextIndex;
       });
     }
   };
-  const handleRating = async (id) => {
+  const handleRating = async (id, text) => {
+    const newDate = calculateNextTime(text);
+    console.log(newDate);
     try {
       const response = await fetch(
-        `http://localhost:3001/decks/${deck_id}/cards/${cardId}`,
+        `http://localhost:8800/api/v1/cards/${cardId}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `${token}`,
+            Authorization: `Bearer ${token}`, // Ensure token format is correct
           },
-          body: JSON.stringify({ rating: id }),
+          body: JSON.stringify({ newDate }),
         }
       );
+
+      if (!response.ok) {
+        // Handle non-2xx status codes
+        const errorData = await response.json();
+        throw new Error(`Error: ${response.status} - ${errorData.message}`);
+      }
+
       const data = await response.json();
       console.log(data);
     } catch (error) {
-      console.error("Error updating card rating:", error);
+      console.error("Error updating card rating:", error.message);
     }
   };
+
   useEffect(() => {
     setIsFlipped(false);
     setIsAnimating(false);
   }, [currentCardIndex]);
-
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8800/api/v1/cards/all-cards") // Adjust the URL according to your backend setup
+      .then((response) => {
+        setCardData(response.data);
+        setCardId(response.data[0].id);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  }, []);
   return (
-    <div className="">
-      <div
-        className="flexStart pt-1 ml-8 mr-8 "
-        style={{ alignItems: "flex-start" }}
-      >
-        <div
-          className="flexStart items-start gap-1 mt-6 text-black cursor-pointer"
-          style={{ alignItems: "flex-start" }}
+    <div className="bg-slate-100 h-screen">
+      <div className="py-4 mx-8 flex justify-end">
+        <button
+          className="px-4 py-2 mr-2 text-white font-semibold bg-blue-600 rounded hover:bg-blue-700"
           onClick={() => {
-            router.back();
+            router.push("/cards/learn-today");
           }}
         >
-          <RollbackOutlined className="mb-4 text-2xl" />
-          <span>Back</span>
-        </div>
+          Card learn today ({cards?.length})
+        </button>
+        <button
+          className="px-4 py-2 mr-2 text-white font-semibold bg-blue-600 rounded hover:bg-blue-700"
+          onClick={() => {
+            router.push("/cards/schedule");
+          }}
+        >
+          Schedule
+        </button>
+        <button
+          className="px-4 py-2 mr-2 text-white font-semibold bg-blue-600 rounded hover:bg-blue-700"
+          onClick={() => {
+            router.push("/cards/add-card");
+          }}
+        >
+          Add card
+        </button>
       </div>
       <div className=" pt-6 flex items-center justify-center h-[500px]  flex-col	">
+        <span>
+          {currentCardIndex + 1}/{cardData?.length}
+        </span>
         <div
           className="flip-card w-[800px] h-[450px] rounded-md cursor-pointer "
           onClick={handleFlip}
@@ -171,25 +224,12 @@ const Card = ({ deck_id }) => {
                 {isFlipped ? (
                   <div className="flip-card-back w-[100%] h-[100%] bg-white text-black p-4 shadow-md hover:shadow-xl rounded-2xl border border-slate-200">
                     <h1 className="text-3xl flex w-[100%] h-[100%] bg-white flexCenter flex-col">
-                      {cardData[currentCardIndex]?.back && (
+                      {cardData[currentCardIndex]?.back_card && (
                         <div className="">
                           <p>
-                            Định nghĩa:
-                            {cardData[currentCardIndex]?.back
+                            {cardData[currentCardIndex]?.back_card
                               .split("</p><p>")[0]
                               .replace(/<p>/g, "")}
-                          </p>
-                          <p>
-                            Cách sử dụng:
-                            {cardData[currentCardIndex]?.back
-                              .split("</p><p>")[1]
-                              .replace(/<p>/g, "")}
-                          </p>
-                          <p>
-                            Ví dụ:
-                            {cardData[currentCardIndex]?.back
-                              .split("</p><p>")[2]
-                              .replace(/<\/p>/g, "")}
                           </p>
                         </div>
                       )}
@@ -198,7 +238,7 @@ const Card = ({ deck_id }) => {
                 ) : (
                   <div className="flip-card-front w-[100%] h-[100%] bg-white text-black shadow-md hover:shadow-xl rounded-2xl border border-slate-200 p-4">
                     <h1 className="flex  text-3xl w-[100%] h-[100%] flexCenter">
-                      {cardData[currentCardIndex]?.front}
+                      {cardData[currentCardIndex]?.front_card}
                     </h1>
                   </div>
                 )}
@@ -213,11 +253,11 @@ const Card = ({ deck_id }) => {
                 <button
                   className="px-4 py-2 mr-2 text-black bg-slate-100 rounded hover:bg-slate-200"
                   onClick={() => {
-                    handleRating(item.id);
+                    handleRating(item.id, item.text);
                     handleNext();
                   }}
                 >
-                  {item.text}({time[index]})
+                  {item.text}({item.label})
                 </button>
               </div>
             ))}
@@ -227,14 +267,16 @@ const Card = ({ deck_id }) => {
 
       <div className="flex justify-center mt-4 mb-4">
         <button
-          className="px-4 py-2 mr-2 text-white bg-lime-700 rounded hover:bg-lime-600"
+          className="px-4 py-2 mr-2 disabled:opacity-25 disabled:cursor-no-drop text-white bg-lime-700 rounded hover:bg-lime-600"
           onClick={handlePrevious}
+          disabled={currentCardIndex + 1 === 1}
         >
           Back
         </button>
         <button
-          className="px-4 py-2 text-white bg-lime-700 rounded hover:bg-lime-600"
+          className="px-4 py-2 disabled:opacity-25 disabled:cursor-no-drop text-white bg-lime-700 rounded hover:bg-lime-600"
           onClick={handleNext}
+          disabled={currentCardIndex + 1 === cardData?.length}
         >
           Next
         </button>
@@ -243,4 +285,4 @@ const Card = ({ deck_id }) => {
   );
 };
 
-export default Card;
+export default ViewCards;

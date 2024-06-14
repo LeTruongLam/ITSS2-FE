@@ -59,10 +59,10 @@ const EditFolder = ({
       if (res.ok) {
         setShowEditFolder(false);
         fetchData();
-        message.success("Sửa thư mục thành công");
+        message.success("Edit success");
       } else {
         // Xử lý khi tạo thư mục thất bại
-        throw new Error("Lỗi khi sửa thư mục");
+        throw new Error("Err");
       }
     } catch (error: any) {
       // Xử lý khi có lỗi xảy ra
@@ -93,7 +93,7 @@ const EditFolder = ({
                     <div className="mt-2">
                       <Input
                         id="title"
-                        placeholder="Nhập tên thư mục mới"
+                        placeholder="Enter name folder"
                         name="name"
                         value={value.name}
                         onChange={handleNameChange}
@@ -103,7 +103,7 @@ const EditFolder = ({
                       />
                       <Input
                         id="title"
-                        placeholder="Nhập thư mục cha mới"
+                        placeholder="Enter parent folder"
                         name="parent_id"
                         value={value.parent_id}
                         onChange={handleParentIdChange}

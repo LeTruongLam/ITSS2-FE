@@ -43,47 +43,6 @@ const TheHeader = () => {
         </ul>
       </div>
 
-      <div className="flexCenter gap-4">
-        {!session ? (
-          <>
-            <Button style={{ backgroundColor: "black" }} type="primary">
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button style={{ backgroundColor: "white" }}>
-              <Link href="/register">Register</Link>
-            </Button>
-          </>
-        ) : (
-          <Dropdown
-            overlay={
-              <Menu>
-                <Menu.Item key="0" icon={<UserOutlined />}>
-                  User info
-                </Menu.Item>
-                <Menu.Item key="1" icon={<SettingOutlined />}>
-                  Setting
-                </Menu.Item>
-                <Menu.Divider />
-                <Menu.Item
-                  key="3"
-                  icon={<LogoutOutlined />}
-                  onClick={handleLogout}
-                >
-                  Logout
-                </Menu.Item>
-              </Menu>
-            }
-            trigger={["click"]}
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                <Avatar />
-                <CaretDownFilled />
-              </Space>
-            </a>
-          </Dropdown>
-        )}
-      </div>
     </nav>
   );
 };

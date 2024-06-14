@@ -38,10 +38,10 @@ const CreateDeck = ({ setShowCreateDeck, id, fetchData }) => {
       if (res.ok) {
         fetchData();
         setShowCreateDeck(false);
-        message.success("Tạo thư mục thành công");
+        message.success("Create deck success");
       } else {
         // Xử lý khi tạo thư mục thất bại
-        throw new Error("Lỗi khi tạo thư mục");
+        throw new Error("Err");
       }
     } catch (error: any) {
       // Xử lý khi có lỗi xảy ra

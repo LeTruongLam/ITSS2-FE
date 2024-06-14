@@ -35,9 +35,9 @@ const CreateFolder = ({ fetchData, setShowCreateFolder }) => {
       if (res.ok) {
         setShowCreateFolder(false);
         fetchData();
-        message.success("Tạo thư mục thành công");
+        message.success("Create folder success");
       } else {
-        throw new Error("Lỗi khi tạo thư mục");
+        throw new Error("Err");
       }
     } catch (error: any) {
       message.error(error.message);
