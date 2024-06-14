@@ -7,7 +7,7 @@ import useSWR from "swr";
 import dayjs from "dayjs"; // Import dayjs để xử lý ngày tháng
 
 interface Card {
-  id: string;
+  id: number;
   front_card: string;
   back_card: string;
   learn_date: string | null;

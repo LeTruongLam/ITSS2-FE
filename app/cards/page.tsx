@@ -6,10 +6,15 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import useSWR from "swr";
 const fetcher = (url: string) => axios.get(url).then((res) => res.data);
-
+interface Card {
+  id: number;
+  front_card: string;
+  back_card: string;
+  learn_date: string | null;
+}
 const ViewCards = () => {
   const router = useRouter();
-  const { data: cards } = useSWR(
+  const { data: cards } = useSWR<Card[]>(
     "https://itss-2-be--one.vercel.app/api/v1/cards/learn-today",
     fetcher,
     { refreshInterval: 100 }
@@ -24,12 +29,13 @@ const ViewCards = () => {
   const token =
     typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
-  const [cardData, setCardData] = useState([]);
+  const [cardData, setCardData] = useState<Card[]>([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [cardId, setCardId] = useState();
+  const [cardId, setCardId] = useState<string | undefined>();
   const [isAnimating, setIsAnimating] = useState(false);
-  const [rating, setRating] = useState([
+
+  const rating = [
     {
       id: 0,
       text: "Again",
@@ -55,7 +61,7 @@ const ViewCards = () => {
       text: "Very Easy",
       label: "2d",
     },
-  ]);
+  ];
 
   const calculateNextTime = (text: string) => {
     const now = new Date();
@@ -63,28 +69,28 @@ const ViewCards = () => {
 
     switch (text) {
       case "Again":
-        nextTime = new Date(now.getTime() + 1 * 60000); // 1 phút
+        nextTime = new Date(now.getTime() + 1 * 60000); // 1 minute
         break;
       case "Hard":
-        nextTime = new Date(now.getTime() + 10 * 60000); // 10 phút
+        nextTime = new Date(now.getTime() + 10 * 60000); // 10 minutes
         break;
       case "Good":
-        nextTime = new Date(now.getTime() + 60 * 60000); // 1 giờ
+        nextTime = new Date(now.getTime() + 60 * 60000); // 1 hour
         break;
       case "Easy":
-        nextTime = new Date(now.getTime() + 24 * 60 * 60000); // 1 ngày
+        nextTime = new Date(now.getTime() + 24 * 60 * 60000); // 1 day
         break;
       case "Very Easy":
-        nextTime = new Date(now.getTime() + 2 * 24 * 60 * 60000); // 2 ngày
+        nextTime = new Date(now.getTime() + 2 * 24 * 60 * 60000); // 2 days
         break;
       default:
         nextTime = now;
         break;
     }
 
-    // Chuyển đổi ngày giờ sang định dạng 'YYYY-MM-DD HH:MM:SS'
+    // Convert date and time to 'YYYY-MM-DD HH:MM:SS' format
     const year = nextTime.getFullYear();
-    const month = String(nextTime.getMonth() + 1).padStart(2, "0"); // Tháng bắt đầu từ 0
+    const month = String(nextTime.getMonth() + 1).padStart(2, "0"); // Months are 0 indexed
     const day = String(nextTime.getDate()).padStart(2, "0");
     const hours = String(nextTime.getHours()).padStart(2, "0");
     const minutes = String(nextTime.getMinutes()).padStart(2, "0");
@@ -101,7 +107,7 @@ const ViewCards = () => {
   };
 
   const handlePrevious = () => {
-    if (!isAnimating) {
+    if (!isAnimating && cardData.length > 0) {
       setIsAnimating(true);
       setIsFlipped(false);
 
@@ -118,6 +124,7 @@ const ViewCards = () => {
       setCardId(cardData[previousIndex].id);
     }
   };
+
   const handleNext = () => {
     if (!isAnimating) {
       setIsAnimating(true);
@@ -129,7 +136,7 @@ const ViewCards = () => {
       });
     }
   };
-  const handleRating = async (id: string, text: string) => {
+  const handleRating = async (id: number, text: string) => {
     const newDate = calculateNextTime(text);
     console.log(newDate);
     try {
@@ -154,7 +161,6 @@ const ViewCards = () => {
       const data = await response.json();
       console.log(data);
     } catch (error) {
-      console.error("Error updating card rating:", error.message);
     }
   };
 
