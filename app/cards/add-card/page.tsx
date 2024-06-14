@@ -18,7 +18,7 @@ const CreateDeck = (props: any) => {
     console.log(cards);
     try {
       const res = await axios.post(
-        `http://localhost:8800/api/v1/cards/create-card`,
+        `https://itss-2-be--one.vercel.app/api/v1/cards/create-card`,
         { front_card, back_card }
       );
 

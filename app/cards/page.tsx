@@ -10,13 +10,13 @@ const fetcher = (url) => axios.get(url).then((res) => res.data);
 const ViewCards = () => {
   const router = useRouter();
   const { data: cards } = useSWR(
-    "http://localhost:8800/api/v1/cards/learn-today",
+    "https://itss-2-be--one.vercel.app/api/v1/cards/learn-today",
     fetcher,
     { refreshInterval: 100 }
   );
 
   // const { data: currentDateData } = useSWR(
-  //   "http://localhost:8800/api/v1/cards/card-learn",
+  //   "https://itss-2-be--one.vercel.app/api/v1/cards/card-learn",
   //   fetcher,
   //   { refreshInterval: 100 }
   // );
@@ -134,7 +134,7 @@ const ViewCards = () => {
     console.log(newDate);
     try {
       const response = await fetch(
-        `http://localhost:8800/api/v1/cards/${cardId}`,
+        `https://itss-2-be--one.vercel.app/api/v1/cards/${cardId}`,
         {
           method: "PUT",
           headers: {
@@ -165,7 +165,7 @@ const ViewCards = () => {
   const [error, setError] = useState(null);
   useEffect(() => {
     axios
-      .get("http://localhost:8800/api/v1/cards/all-cards") // Adjust the URL according to your backend setup
+      .get("https://itss-2-be--one.vercel.app/api/v1/cards/all-cards") // Adjust the URL according to your backend setup
       .then((response) => {
         setCardData(response.data);
         setCardId(response.data[0].id);

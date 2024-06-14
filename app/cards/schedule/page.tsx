@@ -11,7 +11,7 @@ const fetcher = (url) => axios.get(url).then((res) => res.data);
 function SchedulePage() {
   const router = useRouter();
   const { data: cardData } = useSWR(
-    "http://localhost:8800/api/v1/cards/all-cards",
+    "https://itss-2-be--one.vercel.app/api/v1/cards/all-cards",
     fetcher
   );
   const [groupedCards, setGroupedCards] = useState({});
