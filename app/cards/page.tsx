@@ -57,7 +57,7 @@ const ViewCards = () => {
     },
   ]);
 
-  const calculateNextTime = (text) => {
+  const calculateNextTime = (text: string) => {
     const now = new Date();
     let nextTime;
 
@@ -74,8 +74,8 @@ const ViewCards = () => {
       case "Easy":
         nextTime = new Date(now.getTime() + 24 * 60 * 60000); // 1 ngày
         break;
-        case "Very Easy":
-        nextTime = new Date(now.getTime() + 2*24 * 60 * 60000); // 2 ngày
+      case "Very Easy":
+        nextTime = new Date(now.getTime() + 2 * 24 * 60 * 60000); // 2 ngày
         break;
       default:
         nextTime = now;
@@ -129,7 +129,7 @@ const ViewCards = () => {
       });
     }
   };
-  const handleRating = async (id, text) => {
+  const handleRating = async (id: string, text: string) => {
     const newDate = calculateNextTime(text);
     console.log(newDate);
     try {

@@ -6,22 +6,29 @@ import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import dayjs from "dayjs"; // Import dayjs để xử lý ngày tháng
 
-const fetcher = (url) => axios.get(url).then((res) => res.data);
+interface Card {
+  id: string;
+  front_card: string;
+  back_card: string;
+  learn_date: string | null;
+}
+
+const fetcher = (url: string) => axios.get(url).then((res) => res.data);
 
 function SchedulePage() {
   const router = useRouter();
-  const { data: cardData } = useSWR(
+  const { data: cardData } = useSWR<Card[]>(
     "https://itss-2-be--one.vercel.app/api/v1/cards/all-cards",
     fetcher
   );
-  const [groupedCards, setGroupedCards] = useState({});
+  const [groupedCards, setGroupedCards] = useState<{ [key: string]: Card[] }>({});
 
   useEffect(() => {
     if (cardData) {
       // Phân loại các card thành các cụm theo ngày tháng và nhóm "Cần học ngay"
-      const grouped = {};
+      const grouped: { [key: string]: Card[] } = {};
       cardData.forEach((card) => {
-        let date;
+        let date: string;
         if (card.learn_date) {
           date = dayjs(card.learn_date).format("YYYY-MM-DD");
         } else {
@@ -42,7 +49,7 @@ function SchedulePage() {
       });
 
       // Tạo một object mới với key đã sắp xếp
-      const sortedGroupedCards = {};
+      const sortedGroupedCards: { [key: string]: Card[] } = {};
       sortedKeys.forEach((key) => {
         sortedGroupedCards[key] = grouped[key];
       });
